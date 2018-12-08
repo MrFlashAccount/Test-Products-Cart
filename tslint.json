@@ -1,0 +1,37 @@
+{
+  "extends": [
+    "tslint-config-airbnb",
+    "tslint-react",
+    "tslint-react-a11y",
+  ],
+  "link-airbnb": "https://github.com/airbnb/javascript/tree/master/react",
+  "link-react": "https://github.com/palantir/tslint-react",
+  "link-a11y": "https://github.com/joaovieira/tslint-react-a11y",
+  "defaultSeverity": "error",
+  "rules": {
+    "max-line-length": [true, 110],
+    "no-console": true,
+    "no-default-export": true,
+    "function-name": false,
+    "variable-name": false,
+    "import-name": false,
+    "comment-format": false,
+    "prefer-const": false,
+    "no-increment-decrement": false,
+    "one-variable-per-declaration": false,
+    "trailing-comma": true,
+    "align": ["arguments", "statements"],
+    "no-parameter-reassignment": false,
+    "object-curly-spacing": false,
+    "eofline": false,
+    "object-shorthand-properties-first": false,
+    "no-else-after-return": false,
+    "ter-arrow-parens": [true, "as-needed"],
+    "triple-equals": true,
+    "jsx-alignment": false,
+    "jsx-no-multiline-js": false,
+    "jsx-boolean-value": false,
+
+    "semicolon": false
+  }
+}
