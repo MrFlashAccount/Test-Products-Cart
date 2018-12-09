@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require('webpack');
 
 module.exports = {
   entry: path.resolve(__dirname, "src/index.tsx"),
@@ -17,13 +18,18 @@ module.exports = {
     extensions: [".js", ".ts", ".tsx"]
   },
 
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
+
   devServer: {
-    proxy: {
-      "/api": "http://localhost:3000"
-    },
-    contentBase: path.join(__dirname, "public"), // boolean | string | array, static file location
+    contentBase: path.join(__dirname, "dist"),
+    port: 9000,
     compress: true,
+    open: true,
+    hot: true,
     https: false,
-    noInfo: true // only errors & warns on hot reload
+    noInfo: true,
+    inline: true
   }
 };

@@ -40,7 +40,7 @@ export class HistoryEmitter<T, S = never> extends PersistentEmitter<T, S> {
   }
 
   private _pushToHistory(newValue: T) {
-    this._eFuture.patch(() => []);
+    this._eFuture.set([]);
     this._ePast.patch(value => [...value, newValue]);
   }
 
@@ -60,7 +60,7 @@ export class HistoryEmitter<T, S = never> extends PersistentEmitter<T, S> {
       to.set(futureValue);
       from.patch(value => [...value, this._lastValue]);
 
-      this._emitter && this._emitter.emit(newLastValue);
+      super.set(newLastValue);
     }
   }
 }

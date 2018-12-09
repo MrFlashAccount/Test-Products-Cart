@@ -1,7 +1,7 @@
 import { Store } from 'stores/store';
 import { HistoryEmitter } from 'core/HistoryEmitter';
 import { Property } from 'kefir';
-import { PropertyWithHistory } from 'core/utils';
+import { propertyWithHistory } from 'core/utils';
 
 export type CartItem = {
   id: number;
@@ -17,7 +17,7 @@ export class Cart extends Store {
   }
 
   protected load() {
-    [this.pCart, this._eCart] = PropertyWithHistory<CartItem[]>([]);
+    [this.pCart, this._eCart] = propertyWithHistory<CartItem[]>([]);
   }
 
   updateCount(id: number, count: number) {
