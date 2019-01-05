@@ -8,18 +8,6 @@ export type Product = {
   name: string;
 };
 
-export class Products extends Store {
-  pProducts: Property<Product[], never>;
-
-  static getInstance() {
-    return super.getInstance() as Products;
-  }
-
-  load() {
-    [this.pProducts] = property(productsList);
-  }
-}
-
 const productsList: Product[] = [
   {
     id: 0,
@@ -82,3 +70,20 @@ const productsList: Product[] = [
     count: 14,
   },
 ];
+class Products extends Store {
+  pProducts: Property<Product[], never>;
+
+  static getInstance() {
+    return super.getInstance() as Products;
+  }
+
+  load() {
+    [this.pProducts] = property(productsList);
+  }
+}
+
+export const products = Products.getInstance();
+
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
