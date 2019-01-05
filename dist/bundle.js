@@ -27725,8 +27725,8 @@ var HistoryEmitter = /** @class */ (function (_super) {
      * Двигается по истории. направление определяется порядком эмиттеров.
      *
      * @private
-     * @param {PersistentEmitter<T[], void>} from откуда движемся
-     * @param {PersistentEmitter<T[], void>} to куда движемся
+     * @param {PersistentEmitter<T[], S>} from откуда движемся
+     * @param {PersistentEmitter<T[], S>} to куда движемся
      * @memberof HistoryEmitter
      */
     HistoryEmitter.prototype._slideHistory = function (from, to) {
