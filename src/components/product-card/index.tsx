@@ -1,6 +1,8 @@
 import React from 'react';
 import { Product } from 'stores/products';
 import { css } from 'astroturf';
+import cart from 'stores/cart';
+import { GarbageCollector } from 'core/gc';
 
 const styles = css`
   .card {
@@ -52,22 +54,66 @@ export interface ProductCardProps {
   product: Product;
 }
 
-export interface ProductCardState {}
+export interface ProductCardState {
+  /**
+   * Флаг означает, находится ли товар в корзине, или нет
+   *
+   * @type {boolean}
+   * @memberof ProductCardState
+   */
+  inCart: boolean;
+}
 
+/**
+ * Карточка товара
+ *
+ * @export
+ * @class ProductCard
+ * @extends {React.PureComponent<ProductCardProps, ProductCardState>}
+ */
 export default class ProductCard extends React.PureComponent<ProductCardProps, ProductCardState> {
+  private _gc: GarbageCollector;
+
   constructor(props: ProductCardProps) {
     super(props);
 
-    this.state = {};
+    this._gc = new GarbageCollector();
+
+    this.state = {
+      inCart: false,
+    };
   }
 
-  public render() {
+  componentDidMount() {
+    this._gc.add(
+      cart.pCart
+        .map(cart => !!cart.find(({ id }) => id === this.props.product.id))
+        .skipDuplicates()
+        .observe(inCart => this.setState({ inCart })).unsubscribe
+    );
+  }
+
+  componentWillUnmount() {
+    this._gc.release();
+  }
+
+  render() {
     return (
       <div className={styles.card}>
         <h3 className={styles.title}>{this.props.product.name}</h3>
 
-        <button className={styles.addButton}>Добавить в корзину</button>
+        {!this.state.inCart ? (
+          <button className={styles.addButton} onClick={this._addToCart}>
+            Добавить в корзину
+          </button>
+        ) : (
+          'Уже в корзине'
+        )}
       </div>
     );
   }
+
+  private _addToCart = () => {
+    cart.addToCart(this.props.product.id);
+  };
 }

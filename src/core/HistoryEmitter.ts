@@ -24,6 +24,11 @@ export class HistoryEmitter<T, S = never> extends PersistentEmitter<T, S> implem
 
     [this.pPast, this._ePast] = property<T[]>([]);
     [this.pFuture, this._eFuture] = property<T[]>([]);
+
+    this.pPast.log('Past');
+    this.pFuture.log('Future');
+
+    this._pushToHistory(initial);
   }
 
   set(value: T) {
@@ -33,11 +38,11 @@ export class HistoryEmitter<T, S = never> extends PersistentEmitter<T, S> implem
   }
 
   undo() {
-    this._slideHistory(this._ePast, this._eFuture);
+    this._slideHistory(this._eFuture, this._ePast);
   }
 
   redo() {
-    this._slideHistory(this._eFuture, this._ePast);
+    this._slideHistory(this._ePast, this._eFuture);
   }
 
   private _pushToHistory(newValue: T) {

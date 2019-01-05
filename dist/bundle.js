@@ -27548,18 +27548,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var cart_1 = __importDefault(__webpack_require__(/*! stores/cart */ "./src/stores/cart.ts"));
+var gc_1 = __webpack_require__(/*! core/gc */ "./src/core/gc.ts");
 var styles = __webpack_require__(/*! ./index-styles.css */ "./src/components/product-card/index-styles.css");
+/**
+ * Карточка товара
+ *
+ * @export
+ * @class ProductCard
+ * @extends {React.PureComponent<ProductCardProps, ProductCardState>}
+ */
 var ProductCard = /** @class */ (function (_super) {
     __extends(ProductCard, _super);
     function ProductCard(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = {};
+        _this._addToCart = function () {
+            cart_1.default.addToCart(_this.props.product.id);
+        };
+        _this._gc = new gc_1.GarbageCollector();
+        _this.state = {
+            inCart: false,
+        };
         return _this;
     }
+    ProductCard.prototype.componentDidMount = function () {
+        var _this = this;
+        this._gc.add(cart_1.default.pCart
+            .map(function (cart) { return !!cart.find(function (_a) {
+            var id = _a.id;
+            return id === _this.props.product.id;
+        }); })
+            .skipDuplicates()
+            .observe(function (inCart) { return _this.setState({ inCart: inCart }); }).unsubscribe);
+    };
+    ProductCard.prototype.componentWillUnmount = function () {
+        this._gc.release();
+    };
     ProductCard.prototype.render = function () {
         return (react_1.default.createElement("div", { className: styles.card },
             react_1.default.createElement("h3", { className: styles.title }, this.props.product.name),
-            react_1.default.createElement("button", { className: styles.addButton }, "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0432 \u043A\u043E\u0440\u0437\u0438\u043D\u0443")));
+            !this.state.inCart ? (react_1.default.createElement("button", { className: styles.addButton, onClick: this._addToCart }, "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0432 \u043A\u043E\u0440\u0437\u0438\u043D\u0443")) : ('Уже в корзине')));
     };
     return ProductCard;
 }(react_1.default.PureComponent));
@@ -27598,6 +27626,7 @@ var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/r
 var products_1 = __webpack_require__(/*! stores/products */ "./src/stores/products.ts");
 var gc_1 = __webpack_require__(/*! core/gc */ "./src/core/gc.ts");
 var product_card_1 = __importDefault(__webpack_require__(/*! components/product-card */ "./src/components/product-card/index.tsx"));
+var cart_1 = __importDefault(__webpack_require__(/*! stores/cart */ "./src/stores/cart.ts"));
 var ProductsList = /** @class */ (function (_super) {
     __extends(ProductsList, _super);
     function ProductsList(props) {
@@ -27617,7 +27646,10 @@ var ProductsList = /** @class */ (function (_super) {
     };
     ProductsList.prototype.render = function () {
         var products = this.state.products;
-        return products ? this._renderContent(products) : null;
+        return (react_1.default.createElement(react_1.default.Fragment, null,
+            react_1.default.createElement("button", { onClick: function () { return cart_1.default.undo(); } }, "\u041D\u0430\u0437\u0430\u0434"),
+            react_1.default.createElement("button", { onClick: function () { return cart_1.default.redo(); } }, "\u0412\u043F\u0435\u0440\u0435\u0434"),
+            products ? this._renderContent(products) : null));
     };
     ProductsList.prototype._renderContent = function (products) {
         return products.map(function (product) { return react_1.default.createElement(product_card_1.default, { key: product.id, product: product }); });
@@ -27670,6 +27702,9 @@ var HistoryEmitter = /** @class */ (function (_super) {
         var _this = _super.call(this, initial) || this;
         _a = utils_1.property([]), _this.pPast = _a[0], _this._ePast = _a[1];
         _b = utils_1.property([]), _this.pFuture = _b[0], _this._eFuture = _b[1];
+        _this.pPast.log('Past');
+        _this.pFuture.log('Future');
+        _this._pushToHistory(initial);
         return _this;
     }
     HistoryEmitter.prototype.set = function (value) {
@@ -27677,10 +27712,10 @@ var HistoryEmitter = /** @class */ (function (_super) {
         _super.prototype.set.call(this, value);
     };
     HistoryEmitter.prototype.undo = function () {
-        this._slideHistory(this._ePast, this._eFuture);
+        this._slideHistory(this._eFuture, this._ePast);
     };
     HistoryEmitter.prototype.redo = function () {
-        this._slideHistory(this._eFuture, this._ePast);
+        this._slideHistory(this._ePast, this._eFuture);
     };
     HistoryEmitter.prototype._pushToHistory = function (newValue) {
         this._eFuture.set([]);
@@ -27864,9 +27899,9 @@ exports.Store = Store;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var PersistentEmitter_1 = __webpack_require__(/*! core/PersistentEmitter */ "./src/core/PersistentEmitter.ts");
 var kefir_1 = __webpack_require__(/*! kefir */ "./node_modules/kefir/dist/kefir.js");
-var HistoryEmitter_1 = __webpack_require__(/*! core/HistoryEmitter */ "./src/core/HistoryEmitter.ts");
+var HistoryEmitter_1 = __webpack_require__(/*! ./HistoryEmitter */ "./src/core/HistoryEmitter.ts");
+var PersistentEmitter_1 = __webpack_require__(/*! ./PersistentEmitter */ "./src/core/PersistentEmitter.ts");
 function propertyWithHistory(initial) {
     return createProperty(new HistoryEmitter_1.HistoryEmitter(initial));
 }
@@ -27901,6 +27936,75 @@ var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/r
 var react_dom_1 = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 var page_1 = __importDefault(__webpack_require__(/*! components/page */ "./src/components/page/index.tsx"));
 react_dom_1.render(react_1.default.createElement(page_1.default, null), document.getElementById('app'));
+
+
+/***/ }),
+
+/***/ "./src/stores/cart.ts":
+/*!****************************!*\
+  !*** ./src/stores/cart.ts ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var store_1 = __webpack_require__(/*! core/store */ "./src/core/store.ts");
+var utils_1 = __webpack_require__(/*! core/utils */ "./src/core/utils.ts");
+var Cart = /** @class */ (function (_super) {
+    __extends(Cart, _super);
+    function Cart() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Cart.getInstance = function () {
+        return _super.getInstance.call(this);
+    };
+    Cart.prototype.load = function () {
+        var _a;
+        _a = utils_1.propertyWithHistory([]), this.pCart = _a[0], this._eCart = _a[1];
+        this.pCart.log('Cart');
+    };
+    Cart.prototype.updateCount = function (id, count) {
+        this._eCart.patch(function (items) {
+            var indexOfItem = items.findIndex(function (item) { return item.id === id; });
+            if (indexOfItem !== -1) {
+                items[indexOfItem].count = count;
+            }
+            return items;
+        });
+    };
+    Cart.prototype.addToCart = function (itemOrID) {
+        this._eCart.patch(function (items) { return items.concat([
+            typeof itemOrID === 'object' ? itemOrID : { id: itemOrID, count: 1 },
+        ]); });
+    };
+    Cart.prototype.removeFromCart = function (id) {
+        this._eCart.patch(function (items) { return items.filter(function (item) { return item.id !== id; }); });
+    };
+    Cart.prototype.undo = function () {
+        this._eCart.undo();
+    };
+    Cart.prototype.redo = function () {
+        this._eCart.redo();
+    };
+    return Cart;
+}(store_1.Store));
+var cart = Cart.getInstance();
+exports.default = cart;
 
 
 /***/ }),

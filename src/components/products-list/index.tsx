@@ -2,6 +2,7 @@ import React from 'react';
 import { Product, products } from 'stores/products';
 import { GarbageCollector } from 'core/gc';
 import ProductCard from 'components/product-card';
+import cart from 'stores/cart';
 
 export interface ProductsListProps {}
 
@@ -31,7 +32,13 @@ export default class ProductsList extends React.PureComponent<ProductsListProps,
   render() {
     const { products } = this.state;
 
-    return products ? this._renderContent(products) : null;
+    return (
+      <>
+        <button onClick={() => cart.undo()}>Назад</button>
+        <button onClick={() => cart.redo()}>Вперед</button>
+        {products ? this._renderContent(products) : null}
+      </>
+    );
   }
 
   private _renderContent(products: Product[]) {

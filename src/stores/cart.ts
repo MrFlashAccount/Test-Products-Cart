@@ -19,6 +19,7 @@ class Cart extends Store implements IHistorySlider {
 
   protected load() {
     [this.pCart, this._eCart] = propertyWithHistory<CartItem[]>([]);
+    this.pCart.log('Cart');
   }
 
   updateCount(id: number, count: number) {
