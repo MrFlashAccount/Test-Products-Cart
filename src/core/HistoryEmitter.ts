@@ -1,6 +1,7 @@
 import { PersistentEmitter } from './PersistentEmitter';
 import { Property } from 'kefir';
 import { property } from './utils';
+import { IHistorySlider } from 'core/IHistorySlider';
 
 /**
  * Эмиттер, который позволяет перемещаться по истории.
@@ -11,7 +12,7 @@ import { property } from './utils';
  * @template T
  * @template S
  */
-export class HistoryEmitter<T, S = never> extends PersistentEmitter<T, S> {
+export class HistoryEmitter<T, S = never> extends PersistentEmitter<T, S> implements IHistorySlider {
   pPast: Property<T[], never>;
   private _ePast: PersistentEmitter<T[]>;
 
@@ -21,8 +22,8 @@ export class HistoryEmitter<T, S = never> extends PersistentEmitter<T, S> {
   constructor(initial: T) {
     super(initial);
 
-    [this.pPast, this._ePast] = property<T[], never>([]);
-    [this.pFuture, this._eFuture] = property([]);
+    [this.pPast, this._ePast] = property<T[]>([]);
+    [this.pFuture, this._eFuture] = property<T[]>([]);
   }
 
   set(value: T) {

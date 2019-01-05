@@ -1,14 +1,15 @@
-import { Store } from 'stores/store';
+import { Store } from 'core/store';
 import { HistoryEmitter } from 'core/HistoryEmitter';
 import { Property } from 'kefir';
 import { propertyWithHistory } from 'core/utils';
+import { IHistorySlider } from 'core/IHistorySlider';
 
 export type CartItem = {
   id: number;
   count: number;
 };
 
-export class Cart extends Store {
+class Cart extends Store implements IHistorySlider {
   pCart: Property<CartItem[], never>;
   private _eCart: HistoryEmitter<CartItem[]>;
 

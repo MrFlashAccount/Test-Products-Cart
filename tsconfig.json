@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "strictPropertyInitialization": false,
+    "noImplicitAny": false,
     "strict": true,
     "esModuleInterop": true,
     "pretty": true,

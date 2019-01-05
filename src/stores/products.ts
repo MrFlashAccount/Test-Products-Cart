@@ -1,4 +1,4 @@
-import { Store } from './store';
+import { Store } from '../core/store';
 import { Property } from 'kefir';
 import { property } from 'core/utils';
 
@@ -70,6 +70,7 @@ const productsList: Product[] = [
     count: 14,
   },
 ];
+
 class Products extends Store {
   pProducts: Property<Product[], never>;
 

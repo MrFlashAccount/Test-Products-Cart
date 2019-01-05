@@ -1,7 +1,15 @@
 import { Emitter } from 'kefir';
 
+/**
+ * Эмиттер, который хранит последнее значение
+ *
+ * @export
+ * @class PersistentEmitter
+ * @template T тип данных
+ * @template S тип ошибки
+ */
 export class PersistentEmitter<T, S = never> {
-  public get lastValue(): T {
+  get lastValue(): T {
     return this._lastValue;
   }
 
@@ -12,11 +20,17 @@ export class PersistentEmitter<T, S = never> {
     this._lastValue = initial;
   }
 
+  /**
+   * Устанавливает новое значение эмиттера
+   *
+   * @param {T} value
+   * @memberof PersistentEmitter
+   */
   set(value: T) {
     if (this._emitter) {
       this._lastValue = value;
       this._emitter.emit(value);
-    } else throw Error('Попытка установки значения до привязки эмиттера.');
+    } else throw Error('Попытка установки значения до привязки эмиттера');
   }
 
   /**
@@ -37,6 +51,8 @@ export class PersistentEmitter<T, S = never> {
    */
   bind(emitter: Emitter<T, S>) {
     this._emitter = emitter;
+
+    emitter.emit(this._lastValue);
   }
 
   /**

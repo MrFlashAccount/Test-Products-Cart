@@ -35,10 +35,10 @@ export default class ProductsList extends React.PureComponent<ProductsListProps,
   }
 
   private _renderContent(products: Product[]) {
-    return products.map(product => <ProductCard product={product} />);
+    return products.map(product => <ProductCard key={product.id} product={product} />);
   }
 
-  private _setProducts(products: Product[]) {
+  private _setProducts = (products: Product[]) => {
     this.setState({ products });
-  }
+  };
 }
