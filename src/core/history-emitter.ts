@@ -1,7 +1,7 @@
-import { PersistentEmitter } from './PersistentEmitter';
+import { PersistentEmitter } from './persistent-emitter';
 import { Property } from 'kefir';
 import { property } from './utils';
-import { IHistorySlider } from 'core/IHistorySlider';
+import { IHistorySlider } from './history';
 
 /**
  * Эмиттер, который позволяет перемещаться по истории.
@@ -24,15 +24,10 @@ export class HistoryEmitter<T, S = never> extends PersistentEmitter<T, S> implem
 
     [this.pPast, this._ePast] = property<T[]>([]);
     [this.pFuture, this._eFuture] = property<T[]>([]);
-
-    this.pPast.log('Past');
-    this.pFuture.log('Future');
-
-    this._pushToHistory(initial);
   }
 
   set(value: T) {
-    this._pushToHistory(value);
+    this._pushToHistory(this._lastValue);
 
     super.set(value);
   }
@@ -45,7 +40,14 @@ export class HistoryEmitter<T, S = never> extends PersistentEmitter<T, S> implem
     this._slideHistory(this._ePast, this._eFuture);
   }
 
+  /**
+   * Добавляет в историю новый элемент
+   *
+   * @private
+   * @param {T} newValue
+   */
   private _pushToHistory(newValue: T) {
+    // "будущее" нужно сбросить, потому что текущее уже не актуально
     this._eFuture.set([]);
     this._ePast.patch(value => [...value, newValue]);
   }
@@ -53,10 +55,8 @@ export class HistoryEmitter<T, S = never> extends PersistentEmitter<T, S> implem
   /**
    * Двигается по истории. направление определяется порядком эмиттеров.
    *
-   * @private
    * @param {PersistentEmitter<T[], S>} from откуда движемся
    * @param {PersistentEmitter<T[], S>} to куда движемся
-   * @memberof HistoryEmitter
    */
   private _slideHistory(from: PersistentEmitter<T[], S>, to: PersistentEmitter<T[], S>) {
     const { lastValue: futureValue } = to;

@@ -1,25 +1,29 @@
+import { History, IHistory } from 'core/history';
+import { HistoryEmitter } from 'core/history-emitter';
 import { Store } from 'core/store';
-import { HistoryEmitter } from 'core/HistoryEmitter';
-import { Property } from 'kefir';
-import { propertyWithHistory } from 'core/utils';
-import { IHistorySlider } from 'core/IHistorySlider';
+import { HistoryProperty, propertyWithHistory } from 'core/utils';
 
 export type CartItem = {
   id: number;
   count: number;
 };
 
-class Cart extends Store implements IHistorySlider {
-  pCart: Property<CartItem[], never>;
+class Cart extends Store implements IHistory {
+  pCart: HistoryProperty<CartItem[], never>;
+  history: History;
+
   private _eCart: HistoryEmitter<CartItem[]>;
 
   static getInstance() {
     return super.getInstance() as Cart;
   }
 
-  protected load() {
-    [this.pCart, this._eCart] = propertyWithHistory<CartItem[]>([]);
-    this.pCart.log('Cart');
+  constructor() {
+    super();
+
+    [this.pCart, this._eCart, this.history] = propertyWithHistory<CartItem[]>([]);
+
+    this.pCart.spy('Cart');
   }
 
   updateCount(id: number, count: number) {
@@ -43,14 +47,6 @@ class Cart extends Store implements IHistorySlider {
 
   removeFromCart(id: number) {
     this._eCart.patch(items => items.filter(item => item.id !== id));
-  }
-
-  undo() {
-    this._eCart.undo();
-  }
-
-  redo() {
-    this._eCart.redo();
   }
 }
 

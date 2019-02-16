@@ -78,13 +78,11 @@ class Products extends Store {
     return super.getInstance() as Products;
   }
 
-  load() {
+  constructor() {
+    super();
+
     [this.pProducts] = property(productsList);
   }
 }
 
 export const products = Products.getInstance();
-
-///////////////////////////////////////////////////////
-///////////////////////////////////////////////////////
-///////////////////////////////////////////////////////

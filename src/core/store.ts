@@ -7,11 +7,6 @@
  */
 export class Store {
   protected static _instance: Store;
-
-  protected constructor() {
-    this.load();
-  }
-
   static getInstance(): unknown {
     // К сожалению, в ts нет возможности нормально указать возвращаемый тип,
     // поэтому в наследниках делаем приведение типов ручками :С
@@ -22,5 +17,5 @@ export class Store {
     return this._instance;
   }
 
-  protected load() {}
+  protected constructor() {}
 }
