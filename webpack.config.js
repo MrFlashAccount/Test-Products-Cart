@@ -1,11 +1,12 @@
 const path = require('path');
+const BitBarWebpackProgressPlugin = require('bitbar-webpack-progress-plugin');
 
 module.exports = {
   entry: path.resolve(__dirname, 'src/index.tsx'),
   devtool: 'source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].js',
   },
 
   module: {
@@ -26,6 +27,8 @@ module.exports = {
     modules: ['src', 'node_modules'],
     extensions: ['.js', '.ts', '.tsx'],
   },
+
+  plugins: [new BitBarWebpackProgressPlugin()],
 
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
