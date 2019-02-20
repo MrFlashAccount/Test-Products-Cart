@@ -33,7 +33,6 @@ export class Coupons {
 
   constructor() {
     [this.pCoupons] = property<Coupon[]>(data as Coupon[]);
-    this.pCoupons.spy('Coupons');
   }
 }
 
