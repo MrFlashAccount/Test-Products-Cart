@@ -5,12 +5,13 @@
     "strict": true,
     "esModuleInterop": true,
     "pretty": true,
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
     "jsx": "react",
     "baseUrl": "./src",
     "lib": ["es2018", "dom"],
-    "sourceMap": true
+    "sourceMap": true,
+    "resolveJsonModule": true
   }
 }

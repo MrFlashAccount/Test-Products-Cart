@@ -2,19 +2,64 @@ import React, { memo } from 'react';
 import { Product } from 'stores/products';
 import { css } from 'astroturf';
 import cart from 'stores/cart';
-import useProperty from 'hooks/useProperty';
+import { useProperty } from 'hooks/useProperty';
+import { Button } from './button';
+import { Amount } from './amount';
+
+/**
+ * Карточка товара
+ */
+export const ProductCard = memo<{ product: Product }>(({ product }) => {
+  const [inCart] = useProperty(
+    cart.pCart.map(([current]) => !!current.items.find(({ id }) => id === product.id)).skipDuplicates(),
+    false
+  );
+
+  return (
+    <div className={styles.card}>
+      <img className={styles.logo} src={product.picture} alt={product.name} height={150} />
+
+      <div className={styles.content}>
+        <h3 className={styles.title}>{product.name}</h3>
+
+        <Amount amount={product.price} extraClass={styles.price} />
+
+        {!inCart ? (
+          <Button onClick={() => cart.addToCart(product.id)}>Добавить в корзину</Button>
+        ) : (
+          <>
+            <Button buttonStyle="null" onClick={() => cart.removeFromCart(product.id)}>
+              Удалить из корзины
+            </Button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+});
 
 const styles = css`
   .card {
+    display: flex;
     flex-direction: column;
-    padding: 16px;
 
     border-radius: 12px;
+    overflow: hidden;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
   }
 
+  .logo {
+    object-fit: cover;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+  }
+
   .title {
-    margin-bottom: 4px;
+    margin: 8px 0 8px;
 
     color: #414554;
     font-size: 17px;
@@ -22,54 +67,7 @@ const styles = css`
     letter-spacing: -0.0241em;
   }
 
-  .addButton {
-    padding: 8px;
-    width: 100%;
-
-    color: #fff;
-    background: #17c486;
-
-    font-size: 1rem;
-    line-height: 24px;
-    font-weight: 500;
-    font-family: inherit;
-    white-space: nowrap;
-
-    border-radius: 100px;
-    border: 1px solid transparent;
-
-    transition: color 0.3s, background-color 0.3s;
-
-    cursor: pointer;
-    -webkit-appearance: none;
-    appearance: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  .price {
+    margin-bottom: 16px;
   }
 `;
-
-/**
- * Карточка товара
- */
-export const ProductCard = memo<{ product: Product }>(({ product }) => {
-  const [inCart] = useProperty(
-    cart.pCart.map(([current]) => !!current.find(({ id }) => id === product.id)).skipDuplicates(),
-    false
-  );
-
-  return (
-    <div className={styles.card}>
-      <h3 className={styles.title}>{product.name}</h3>
-
-      {!inCart ? (
-        <button className={styles.addButton} onClick={() => cart.addToCart(product.id)}>
-          Добавить в корзину
-        </button>
-      ) : (
-        'Уже в корзине'
-      )}
-    </div>
-  );
-});

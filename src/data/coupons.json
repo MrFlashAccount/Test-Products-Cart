@@ -1,0 +1,28 @@
+[
+  {
+    "id": "Anguilla",
+    "amount": 35,
+    "kind": "product",
+    "productID": 8,
+    "type": "percent"
+  },
+  {
+    "id": "Sudan",
+    "amount": 33,
+    "kind": "cart",
+    "type": "fixed"
+  },
+  {
+    "id": "Bulgaria",
+    "amount": 16,
+    "kind": "product",
+    "productID": 1,
+    "type": "fixed"
+  },
+  {
+    "id": "French Guiana",
+    "amount": 66,
+    "kind": "cart",
+    "type": "percent"
+  }
+]

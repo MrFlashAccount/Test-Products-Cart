@@ -1,0 +1,72 @@
+[
+  {
+    "id": 0,
+    "name": "Machias",
+    "price": 1586,
+    "count": 10,
+    "picture": "https://via.placeholder.com/750/000000/FFFFFF/?text=Machias"
+  },
+  {
+    "id": 1,
+    "name": "Richford",
+    "price": 184,
+    "count": 8,
+    "picture": "https://via.placeholder.com/750/000000/FFFFFF/?text=Richford"
+  },
+  {
+    "id": 2,
+    "name": "Cataract",
+    "price": 1352,
+    "count": 6,
+    "picture": "https://via.placeholder.com/750/000000/FFFFFF/?text=Cataract"
+  },
+  {
+    "id": 3,
+    "name": "Dowling",
+    "price": 493,
+    "count": 7,
+    "picture": "https://via.placeholder.com/750/000000/FFFFFF/?text=Dowling"
+  },
+  {
+    "id": 4,
+    "name": "Springville",
+    "price": 1151,
+    "count": 2,
+    "picture": "https://via.placeholder.com/750/000000/FFFFFF/?text=Springville"
+  },
+  {
+    "id": 5,
+    "name": "Shelby",
+    "price": 1958,
+    "count": 10,
+    "picture": "https://via.placeholder.com/750/000000/FFFFFF/?text=Shelby"
+  },
+  {
+    "id": 6,
+    "name": "Motley",
+    "price": 475,
+    "count": 9,
+    "picture": "https://via.placeholder.com/750/000000/FFFFFF/?text=Motley"
+  },
+  {
+    "id": 7,
+    "name": "Emerald",
+    "price": 1913,
+    "count": 5,
+    "picture": "https://via.placeholder.com/750/000000/FFFFFF/?text=Emerald"
+  },
+  {
+    "id": 8,
+    "name": "Tooleville",
+    "price": 640,
+    "count": 5,
+    "picture": "https://via.placeholder.com/750/000000/FFFFFF/?text=Tooleville"
+  },
+  {
+    "id": 9,
+    "name": "Eagleville",
+    "price": 130,
+    "count": 9,
+    "picture": "https://via.placeholder.com/750/000000/FFFFFF/?text=Eagleville"
+  }
+]

@@ -9,7 +9,7 @@ export interface IHistorySlider {
 
 /**
  * Довольно абстрактная вещь, но позволяющая через композицию предоставить доступ
- * методам undo и redo emitter'a при этом сохраняя инкапсуляцию
+ * методам undo и redo emitter'a при этом сохраняя инкапсуляцию.
  *
  * @export
  * @class History
@@ -22,11 +22,6 @@ export class History implements IHistorySlider {
     this._historyEmitter = historyEmitter;
   }
 
-  undo() {
-    this._historyEmitter.undo();
-  }
-
-  redo() {
-    this._historyEmitter.redo();
-  }
+  undo = () => this._historyEmitter.undo();
+  redo = () => this._historyEmitter.redo();
 }

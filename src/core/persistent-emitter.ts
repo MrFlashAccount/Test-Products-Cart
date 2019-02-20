@@ -29,7 +29,7 @@ export class PersistentEmitter<T, S = never> {
   set(value: T) {
     if (this._emitter) {
       this._lastValue = value;
-      this._emitter.emit(value);
+      this._emitter.value(value);
     } else throw Error('Попытка установки значения до привязки эмиттера');
   }
 
@@ -52,7 +52,7 @@ export class PersistentEmitter<T, S = never> {
   bind(emitter: Emitter<T, S>) {
     this._emitter = emitter;
 
-    emitter.emit(this._lastValue);
+    emitter.value(this._lastValue);
   }
 
   /**

@@ -1,7 +1,7 @@
-import { Property, stream, combine } from 'kefir';
+import { combine, Property, stream } from 'kefir';
+import { History } from './history';
 import { HistoryEmitter } from './history-emitter';
 import { PersistentEmitter } from './persistent-emitter';
-import { History } from './history';
 
 export type HistoryProperty<T, S> = Property<[T, T[], T[]], S>;
 
@@ -21,9 +21,11 @@ export function propertyWithHistory<T, S = never>(
   return [
     combine([pCurrent, emitter.pPast, emitter.pFuture])
       .toProperty()
-      // Добавим чисто символический debounce, чтобы не было спама event'ов при *почти*
-      // одновременном изменении значений потока
-      .debounce(24),
+      // Т.к. значение во все потоки ставится не одновременно,
+      // но потоки *связаны*, значит, поставим небольшой debounce, чтобы итоговый поток
+      // дождался изменения всех внутренних потоков, и затем оповестил подписчиков
+      // Таким образом мы исключим "спам" событий
+      .debounce(0),
     emitter,
     new History(emitter),
   ];

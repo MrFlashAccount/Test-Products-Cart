@@ -47,7 +47,7 @@ export class HistoryEmitter<T, S = never> extends PersistentEmitter<T, S> implem
    * @param {T} newValue
    */
   private _pushToHistory(newValue: T) {
-    // "будущее" нужно сбросить, потому что текущее уже не актуально
+    // "будущее" нужно сбросить, потому что оно уже не актуально
     this._eFuture.set([]);
     this._ePast.patch(value => [...value, newValue]);
   }
@@ -59,14 +59,16 @@ export class HistoryEmitter<T, S = never> extends PersistentEmitter<T, S> implem
    * @param {PersistentEmitter<T[], S>} to куда движемся
    */
   private _slideHistory(from: PersistentEmitter<T[], S>, to: PersistentEmitter<T[], S>) {
-    const { lastValue: futureValue } = to;
-    const newLastValue = futureValue.pop();
+    const { lastValue: toValue } = to;
+    const currentValue = this.lastValue;
 
-    if (newLastValue) {
-      to.set(futureValue);
-      from.patch(value => [...value, this._lastValue]);
+    const newValue = toValue.pop();
 
-      super.set(newLastValue);
+    if (newValue) {
+      to.set(toValue);
+      from.patch(value => [...value, currentValue]);
+
+      super.set(newValue);
     }
   }
 }

@@ -1,9 +1,5 @@
 {
-  "extends": [
-    "tslint-config-airbnb",
-    "tslint-react",
-    "tslint-react-a11y",
-  ],
+  "extends": ["tslint-config-airbnb", "tslint-react", "tslint-react-hooks", "tslint-react-a11y"],
   "link-airbnb": "https://github.com/airbnb/javascript/tree/master/react",
   "link-react": "https://github.com/palantir/tslint-react",
   "link-a11y": "https://github.com/joaovieira/tslint-react-a11y",
@@ -11,7 +7,6 @@
   "rules": {
     "max-line-length": [true, 110],
     "no-console": true,
-    "no-default-export": true,
     "function-name": false,
     "variable-name": false,
     "import-name": false,

@@ -1,8 +1,7 @@
 {
-  "name": "confirmit",
+  "name": "product_cart",
   "version": "1.0.0",
-  "description": "Тестовое задание Confirmit",
-  "main": "index.js",
+  "description": "Тестовое задание",
   "scripts": {
     "build": "webpack --mode production --config webpack.config.js --progress --color",
     "start": "webpack --mode development --config webpack.config.js --watch --progress --color",
@@ -29,6 +28,7 @@
     "tslint-config-airbnb": "^5.11.1",
     "tslint-react": "^3.6.0",
     "tslint-react-a11y": "^1.0.0",
+    "tslint-react-hooks": "^1.1.0",
     "typescript": "^3.3.3",
     "uglifyjs-webpack-plugin": "^2.1.1",
     "webpack": "^4.29.4",
