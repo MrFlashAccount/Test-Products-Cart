@@ -12,6 +12,9 @@ import { productsInCart } from 'models/products-in-cart';
 import { products } from 'stores/products';
 import coupons from 'stores/coupons';
 
+/**
+ * Страница с корзиной
+ */
 export const Cart = React.memo(() => {
   const pProductsInCart = productsInCart(products.pProducts, coupons.pCoupons, cart.pCurrentCart);
 
@@ -41,6 +44,8 @@ export const Cart = React.memo(() => {
         aria-label={'Вернуть'}
         title={'Вернуть'}
       />
+
+      {/*inCartProducts && <ProductCartTable products={inCartProducts.items} />*/}
 
       <Grid>
         {inCartProducts

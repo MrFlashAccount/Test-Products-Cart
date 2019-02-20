@@ -3,6 +3,9 @@ import { useProperty } from 'hooks/useProperty';
 import coupons from 'stores/coupons';
 import cart from 'stores/cart';
 
+/**
+ * Компонент с выбором купонов
+ */
 export const CouponsList = React.memo(() => {
   const [couponsList] = useProperty(coupons.pCoupons, undefined);
   const [inputValue, setInputValue] = useState('');

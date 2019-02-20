@@ -1,5 +1,4 @@
 const path = require('path');
-const BitBarWebpackProgressPlugin = require('bitbar-webpack-progress-plugin');
 
 module.exports = {
   entry: path.resolve(__dirname, 'src/index.tsx'),
@@ -26,17 +25,5 @@ module.exports = {
   resolve: {
     modules: ['src', 'node_modules'],
     extensions: ['.js', '.ts', '.tsx'],
-  },
-
-  plugins: [new BitBarWebpackProgressPlugin()],
-
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    port: 9000,
-    compress: true,
-    open: true,
-    https: false,
-    noInfo: true,
-    inline: true,
   },
 };

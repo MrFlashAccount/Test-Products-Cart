@@ -9,6 +9,9 @@ export interface CartTotalProps {
   pProductsInCart: Property<ProductsInCart, any>;
 }
 
+/**
+ * Сумма корзины с промежуточным итогом и величиной скидки
+ */
 export const CartTotal = memo<CartTotalProps>(({ pProductsInCart }) => {
   const [total] = useProperty(cartTotal(pProductsInCart), undefined);
 

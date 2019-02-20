@@ -4,6 +4,9 @@ import { ProductCard } from 'components/product-card';
 import { useProperty } from 'hooks/useProperty';
 import { Grid } from './grid';
 
+/**
+ * Список товаров на главной
+ */
 export const ProductsList = React.memo(() => {
   const [productsList] = useProperty(products.pProducts, undefined);
 

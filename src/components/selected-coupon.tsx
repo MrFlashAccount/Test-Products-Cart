@@ -7,11 +7,16 @@ import { ProductsInCart } from 'models/products-in-cart';
 import { Property } from 'kefir';
 import { products, Product } from 'stores/products';
 import { Amount } from './amount';
+import { ObjectMap } from 'types';
+import { Coupon } from 'stores/coupons';
 
 export interface SelectedCouponProps {
   pProductsInCart: Property<ProductsInCart, any>;
 }
 
+/**
+ * Выводит информацию о текущем выбранном купоне
+ */
 export const SelectedCoupon = memo<SelectedCouponProps>(({ pProductsInCart }) => {
   const [coupon] = useProperty(pProductsInCart.map(productsInCart => productsInCart.coupon), undefined);
   const [allProducts] = useProperty(products.pProducts, undefined);
@@ -24,8 +29,8 @@ export const SelectedCoupon = memo<SelectedCouponProps>(({ pProductsInCart }) =>
 
   return coupon ? (
     <>
-      <div className={styles.coupon}>
-        Выбран купон: {coupon.id}
+      <section className={styles.coupon}>
+        <h4>Выбран купон: {coupon.id}</h4>
         <Button
           buttonStyle="null"
           onClick={() => cart.removeCoupon()}
@@ -33,18 +38,18 @@ export const SelectedCoupon = memo<SelectedCouponProps>(({ pProductsInCart }) =>
           title={'Удалить купон'}
           aria-label={'Удалить купон'}
         />
-      </div>
+      </section>
 
-      <div>
+      <section>
         <p>Скидка: {coupon.type === 'fixed' ? <Amount amount={coupon.amount} /> : `${coupon.amount}%`}</p>
         <p>Применение купона: {couponKindToHumanFormat[coupon.kind]}</p>
         {couponProduct && <p>Применяется к товару: {couponProduct.name}</p>}
-      </div>
+      </section>
     </>
   ) : null;
 });
 
-const couponKindToHumanFormat = {
+const couponKindToHumanFormat: ObjectMap<Coupon['kind'], string> = {
   cart: 'к корзине',
   product: 'к товару',
 };
