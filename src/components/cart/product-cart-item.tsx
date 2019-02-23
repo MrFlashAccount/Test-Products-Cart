@@ -1,0 +1,113 @@
+import React, { memo, useCallback } from 'react';
+import { ProductInCart } from 'models/products-in-cart';
+import cart from 'stores/cart';
+import { Amount } from '../partial/amount';
+import { MemoizedButton } from '../partial/button';
+import { ProductCartItemAmount } from './product-cart-item-amount';
+import { css } from 'astroturf';
+import { WithoutPrint } from 'components/partial/print';
+
+/**
+ * Карточка товара в корзине
+ */
+export const ProductCartItem = memo<{ product: ProductInCart }>(({ product }) => {
+  const updateCount = useCallback((count: number) => cart.updateCount(product.id, count), []);
+  const deleteFromCart = useCallback(() => cart.removeFromCart(product.id), []);
+
+  return (
+    <tr className={styles.item}>
+      <td className={styles.bycontent}>
+        <WithoutPrint>
+          <img
+            className={styles.icon}
+            src={product.productInfo.picture}
+            alt={`Логотип ${product.productInfo.name}`}
+            height={100}
+            width={100}
+          />
+        </WithoutPrint>
+      </td>
+
+      <td className={`${styles.description}`}>
+        <h3 className={styles.name}>{product.productInfo.name}</h3>
+        <WithoutPrint>
+          <p className={styles.max}>Всего штук: {product.productInfo.count}</p>
+        </WithoutPrint>
+
+        <Amount extraClass={styles.price} amount={product.productInfo.price} />
+      </td>
+
+      <td className={styles.row}>
+        <ProductCartItemAmount
+          maxCount={product.productInfo.count}
+          count={product.count}
+          updateCount={updateCount}
+        />
+      </td>
+
+      <td className={styles.total}>
+        <Amount amount={product.productInfo.price * product.count} />
+      </td>
+
+      <td className={styles.row}>
+        <MemoizedButton
+          buttonStyle={'null'}
+          extraClass={styles.delete}
+          title={`Удалить товар ${product.productInfo.name}`}
+          aria-label={`Удалить товар ${product.productInfo.name}`}
+          onClick={deleteFromCart}
+        />
+      </td>
+    </tr>
+  );
+});
+
+const styles = css`
+  .item {
+    white-space: nowrap;
+  }
+
+  .icon {
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+  }
+
+  .row {
+    padding: 0 16px;
+  }
+
+  .description {
+    width: 100%;
+  }
+
+  .name {
+    margin: 0 0 4px;
+
+    font-size: 20px;
+  }
+
+  .max {
+    margin: 0 0 8px;
+
+    font-size: 14px;
+  }
+
+  .price {
+    font-size: 18px;
+  }
+
+  .total {
+    font-weight: 600;
+  }
+
+  .delete {
+    width: 32px;
+    height: 32px;
+
+    background-size: 16px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpath d='M962.6 830.4L632.1 500l330.5-330.5A93.4 93.4 0 1 0 830.4 37.4L500 367.8 169.5 37.4A93.5 93.5 0 0 0 37.4 169.5L367.8 500 37.4 830.4a93.5 93.5 0 0 0 132.1 132.2L500 632.1l330.4 330.5a93.5 93.5 0 0 0 132.2-132.2z'/%3E%3C/svg%3E");
+  }
+`;

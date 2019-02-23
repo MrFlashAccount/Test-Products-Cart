@@ -1,68 +1,102 @@
-import React from 'react';
-import cart from 'stores/cart';
-import { Grid } from './grid';
-import { ProductCard } from './product-card';
-import { CouponsList } from './coupons-list';
 import { css } from 'astroturf';
-import { Button } from './button';
 import { useProperty } from 'hooks/useProperty';
-import { SelectedCoupon } from './selected-coupon';
-import { CartTotal } from './cart-total';
 import { productsInCart } from 'models/products-in-cart';
-import { products } from 'stores/products';
+import React, { memo } from 'react';
+import cart from 'stores/cart';
 import coupons from 'stores/coupons';
+import { products } from 'stores/products';
+import { Button, MemoizedButton } from '../partial/button';
+import { CartTotal } from './cart-total';
+import { CouponsList } from './coupons-list';
+import { ProductCartList } from './product-cart-list';
+import { SelectedCoupon } from './selected-coupon';
+import { WithoutPrint, WithPrint } from 'components/partial/print';
 
 /**
  * Страница с корзиной
  */
 export const Cart = React.memo(() => {
-  const pProductsInCart = productsInCart(products.pProducts, coupons.pCoupons, cart.pCurrentCart);
+  return (
+    <>
+      <header className={styles.header}>
+        <WithoutPrint>
+          <h1>Корзина</h1>
+        </WithoutPrint>
 
-  const [inCartProducts] = useProperty(pProductsInCart, undefined);
+        <WithPrint>
+          <h1>Чек</h1>
+        </WithPrint>
+
+        <div className={styles.actions}>
+          <UndoRedo />
+        </div>
+      </header>
+
+      <CartContent />
+    </>
+  );
+});
+
+const UndoRedo = memo(() => {
   const [[canUndo, canRedo]] = useProperty<[boolean, boolean], never>(
-    cart.pCart.map(([_, prev, future]) => [prev.length > 0, future.length > 0] as [boolean, boolean]),
+    cart.pCart
+      .map(([_, prev, future]) => [prev.length > 0, future.length > 0] as [boolean, boolean])
+      .skipDuplicates((v1, v2) => v1[0] === v2[0] && v1[1] === v2[1]),
     [false, false]
   );
 
   return (
     <>
-      <h1>Корзина</h1>
-
-      <Button
+      <MemoizedButton
         extraClass={styles.undo}
         disabled={!canUndo}
         buttonStyle={'null'}
-        onClick={() => cart.history.undo()}
+        onClick={cart.history.undo}
         aria-label={'Отменить'}
         title={'Отменить'}
       />
-      <Button
+      <MemoizedButton
         disabled={!canRedo}
         extraClass={styles.redo}
         buttonStyle={'null'}
-        onClick={() => cart.history.redo()}
+        onClick={cart.history.redo}
         aria-label={'Вернуть'}
         title={'Вернуть'}
       />
+    </>
+  );
+});
 
-      {/*inCartProducts && <ProductCartTable products={inCartProducts.items} />*/}
+const CartContent = memo(() => {
+  const pProductsInCart = productsInCart(products.pProducts, coupons.pCoupons, cart.pCurrentCart);
+  const [inCartProducts] = useProperty(pProductsInCart, undefined);
 
-      <Grid>
-        {inCartProducts
-          ? inCartProducts.items.map(p => <ProductCard key={p.id} product={p.productInfo} />)
-          : null}
-      </Grid>
+  return (
+    <>
+      {inCartProducts && <ProductCartList products={inCartProducts.items} />}
 
       <CouponsList />
       <SelectedCoupon pProductsInCart={pProductsInCart} />
+      <CartTotal pProductsInCart={pProductsInCart} />
 
-      {inCartProducts && <CartTotal pProductsInCart={pProductsInCart} />}
+      {inCartProducts && inCartProducts.items.length > 0 && (
+        <MemoizedButton onClick={window.print}>Распечатать чек</MemoizedButton>
+      )}
     </>
   );
 });
 
 // tslint:disable
 const styles = css`
+  .header {
+    display: flex;
+    align-items: center;
+  }
+
+  .actions {
+    margin-left: auto;
+  }
+
   .undo {
     width: 48px;
     height: 48px;

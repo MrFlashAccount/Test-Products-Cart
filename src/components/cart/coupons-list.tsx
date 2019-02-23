@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useProperty } from 'hooks/useProperty';
 import coupons from 'stores/coupons';
 import cart from 'stores/cart';
+import { css } from 'astroturf';
+import { WithoutPrint } from 'components/partial/print';
 
 /**
  * Компонент с выбором купонов
@@ -32,27 +34,30 @@ export const CouponsList = React.memo(() => {
   }
 
   return couponsList ? (
-    <form action="" onSubmit={onSubmit}>
-      <label htmlFor="coupons-input">{'Использовать купон '}</label>
-      <input
-        list="coupons"
-        value={inputValue}
-        onChange={e => {
-          setInputValue(e.target.value);
-          setError(undefined);
-        }}
-        id="coupons-input"
-        name="couponsInput"
-      />
-      <datalist id="coupons">
-        {couponsList.map(coupon => (
-          <option key={coupon.id} value={coupon.id} />
-        ))}
-      </datalist>
+    <WithoutPrint>
+      <form action="" onSubmit={onSubmit}>
+        <label htmlFor="coupons-input">{'Использовать купон '}</label>
 
-      <button type="submit">Применить купон</button>
+        <input
+          list="coupons"
+          value={inputValue}
+          onChange={e => {
+            setInputValue(e.target.value);
+            setError(undefined);
+          }}
+          id="coupons-input"
+          name="couponsInput"
+        />
+        <datalist id="coupons">
+          {couponsList.map(coupon => (
+            <option key={coupon.id} value={coupon.id} />
+          ))}
+        </datalist>
 
-      {error && <p>{error}</p>}
-    </form>
+        <button type="submit">Применить купон</button>
+
+        {error && <p>{error}</p>}
+      </form>
+    </WithoutPrint>
   ) : null;
 });

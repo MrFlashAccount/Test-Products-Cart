@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
-import { ProductsList } from 'components/products-list';
+import { ProductsList } from 'components/products/products-list';
 import { css } from 'astroturf';
 import { TopBar } from './topbar';
-import { Cart } from './cart';
+import { Cart } from './cart/cart';
+import { ObjectMap } from 'types';
+import { SaveToStorage } from './partial/save-to-storage';
 
 export type PageType = 'list' | 'cart';
+
+const componentByPageType: ObjectMap<PageType, JSX.Element> = {
+  cart: <Cart />,
+  list: <ProductsList />,
+};
 
 export const Page = () => {
   const [page, setPage] = useState<PageType>('list');
@@ -12,7 +19,9 @@ export const Page = () => {
   return (
     <div className={styles.layout}>
       <TopBar onNavigate={setPage} />
-      <main className={styles.main}>{page === 'list' ? <ProductsList /> : <Cart />}</main>
+      <main className={styles.main}>{componentByPageType[page]}</main>
+
+      <SaveToStorage />
     </div>
   );
 };
@@ -44,6 +53,6 @@ const styles = css`
   }
 
   .main {
-    padding: 0 calc(var(--gap) / 2);
+    padding: calc(var(--gap) / 2);
   }
 `;

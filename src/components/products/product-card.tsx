@@ -3,8 +3,8 @@ import { Product } from 'stores/products';
 import { css } from 'astroturf';
 import cart from 'stores/cart';
 import { useProperty } from 'hooks/useProperty';
-import { Button } from './button';
-import { Amount } from './amount';
+import { Button } from '../partial/button';
+import { Amount } from '../partial/amount';
 
 /**
  * Карточка товара

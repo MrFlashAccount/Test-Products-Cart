@@ -1,6 +1,6 @@
 import { css } from 'astroturf';
 import React, { memo } from 'react';
-import { Amount } from './amount';
+import { Amount } from '../partial/amount';
 import { useProperty } from 'hooks/useProperty';
 import { cartTotal, ProductsInCart } from 'models/products-in-cart';
 import { Property } from 'kefir';

@@ -2,11 +2,11 @@ import React, { memo } from 'react';
 import { useProperty } from 'hooks/useProperty';
 import cart from 'stores/cart';
 import { css } from 'astroturf';
-import { Button } from './button';
+import { Button, MemoizedButton } from '../partial/button';
 import { ProductsInCart } from 'models/products-in-cart';
 import { Property } from 'kefir';
 import { products, Product } from 'stores/products';
-import { Amount } from './amount';
+import { Amount } from '../partial/amount';
 import { ObjectMap } from 'types';
 import { Coupon } from 'stores/coupons';
 
@@ -31,9 +31,10 @@ export const SelectedCoupon = memo<SelectedCouponProps>(({ pProductsInCart }) =>
     <>
       <section className={styles.coupon}>
         <h4>Выбран купон: {coupon.id}</h4>
-        <Button
+
+        <MemoizedButton
           buttonStyle="null"
-          onClick={() => cart.removeCoupon()}
+          onClick={cart.removeCoupon}
           extraClass={styles.delete}
           title={'Удалить купон'}
           aria-label={'Удалить купон'}

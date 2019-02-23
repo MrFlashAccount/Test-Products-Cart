@@ -1,13 +1,27 @@
 import React, { memo } from 'react';
 import { css } from 'astroturf';
 import { PageType } from './page';
+import { Button } from './partial/button';
+import { WithoutPrint } from './partial/print';
 
 export const TopBar = memo<{ onNavigate: (type: PageType) => void }>(({ onNavigate }) => {
   return (
-    <header className={styles.header}>
-      <button onClick={() => onNavigate('list')}>Список товаров</button>
-      <button onClick={() => onNavigate('cart')}>Корзина</button>
-    </header>
+    <WithoutPrint>
+      <nav className={styles.header}>
+        <ul className={styles.list}>
+          <li className={styles.item}>
+            <Button extraClass={styles.button} buttonStyle={'null'} onClick={() => onNavigate('list')}>
+              Список товаров
+            </Button>
+          </li>
+          <li className={styles.item}>
+            <Button extraClass={styles.button} buttonStyle={'null'} onClick={() => onNavigate('cart')}>
+              Корзина
+            </Button>
+          </li>
+        </ul>
+      </nav>
+    </WithoutPrint>
   );
 });
 
@@ -24,5 +38,29 @@ const styles = css`
     border-bottom: 1px solid #e4e6ec;
 
     z-index: 1;
+  }
+
+  .list {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 0;
+    margin: 0;
+
+    list-style: none;
+  }
+
+  .item {
+    display: inline-block;
+
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+
+  .button {
+    width: auto;
+
+    font-size: 18px;
   }
 `;

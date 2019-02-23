@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Omit } from 'types';
 import { css } from 'astroturf';
+import { WithoutPrint } from './print';
 
 export type ButtonProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'className'> & {
   buttonStyle?: 'primary' | 'null';
@@ -8,12 +9,18 @@ export type ButtonProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'c
 };
 
 export const Button: React.FC<ButtonProps> = ({ buttonStyle = 'primary', extraClass = '', ...props }) => {
-  return <button className={`${styles.button} ${styles[buttonStyle]} ${extraClass}`} {...props} />;
+  return (
+    <WithoutPrint>
+      <button className={`${styles.button} ${styles[buttonStyle]} ${extraClass}`} {...props} />
+    </WithoutPrint>
+  );
 };
+
+export const MemoizedButton = memo<ButtonProps>(props => <Button {...props} />);
 
 const styles = css`
   .button {
-    padding: 8px;
+    padding: 4px 8px;
     width: 100%;
 
     font-size: 1rem;
@@ -41,8 +48,10 @@ const styles = css`
     }
 
     &.null {
+      background-color: transparent;
+
       &:hover {
-        background-color: rgba(242, 243, 246, 0.5);
+        background-color: rgba(242, 243, 246, 0.9);
       }
     }
 

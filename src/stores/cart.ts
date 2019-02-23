@@ -3,6 +3,7 @@ import { HistoryEmitter } from 'core/history-emitter';
 import { HistoryProperty, propertyWithHistory } from 'core/utils';
 import { Coupon } from './coupons';
 import { Property } from 'kefir';
+import { fromPersistentStorage } from 'models/persistent-storage';
 
 export type CartState = {
   items: CartItem[];
@@ -14,7 +15,8 @@ export type CartItem = {
   count: number;
 };
 
-class Cart implements IHistory {
+export class Cart implements IHistory {
+  readonly persistentStorageKey = 'cart';
   /**
    * Поток со всей информацией о корзине, включая ее прошлое и будущее
    *
@@ -32,46 +34,50 @@ class Cart implements IHistory {
   private _eCart: HistoryEmitter<CartState>;
 
   constructor() {
-    [this.pCart, this._eCart, this.history] = propertyWithHistory<CartState>({ items: [] });
-    this.pCurrentCart = this.pCart.map(([current]) => current);
+    [this.pCart, this._eCart, this.history] = propertyWithHistory<CartState>(
+      fromPersistentStorage(this.persistentStorageKey, {
+        items: [],
+      })
+    );
 
-    // для отслеживания состояния корзины в консоли.
-    this.pCart.spy('Cart');
+    this.pCurrentCart = this.pCart.map(([current]) => current);
   }
 
-  updateCount(id: number, count: number) {
+  updateCount = (id: number, count: number) => {
     this._eCart.patch(state => {
-      const { items } = state;
+      const items = state.items.slice(0);
       const indexOfItem = items.findIndex(item => item.id === id);
 
       if (indexOfItem !== -1) {
-        items[indexOfItem].count = count;
+        items[indexOfItem] = {
+          ...items[indexOfItem],
+          count,
+        };
       }
 
       return { ...state, items };
     });
-  }
+  };
 
-  addToCart(itemOrID: number | CartItem) {
+  addToCart = (itemOrID: number | CartItem) => {
     this._eCart.patch(state => ({
       ...state,
       items: [...state.items, typeof itemOrID === 'object' ? itemOrID : { id: itemOrID, count: 1 }],
     }));
-  }
+  };
 
-  removeFromCart(id: number) {
+  removeFromCart = (id: number) => {
     this._eCart.patch(state => ({ ...state, items: state.items.filter(item => item.id !== id) }));
-  }
+  };
 
-  addCoupon(couponID: Coupon['id']) {
+  addCoupon = (couponID: Coupon['id']) => {
     this._eCart.patch(state => ({ ...state, coupon: couponID }));
-  }
+  };
 
-  removeCoupon() {
+  removeCoupon = () => {
     this._eCart.patch(({ coupon, ...rest }) => ({ ...rest }));
-  }
+  };
 }
-
 const cart = new Cart();
 
 export default cart;

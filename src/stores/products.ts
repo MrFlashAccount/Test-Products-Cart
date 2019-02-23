@@ -10,7 +10,7 @@ export type Product = {
   name: string;
 };
 
-class Products {
+export class Products {
   pProducts: Property<Product[], never>;
 
   constructor() {
