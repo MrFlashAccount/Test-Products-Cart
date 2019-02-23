@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Тестовое задание",
   "scripts": {
-    "build": "webpack --mode production --config webpack.config.js --progress --color",
-    "start": "webpack --mode development --config webpack.config.js --watch --progress --color",
+    "start": "webpack-dev-server --mode development --config webpack.config.js --progress --color",
+    "prod": "webpack --mode production --config webpack.config.js --progress --color",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Sergey Garin",
@@ -29,8 +29,8 @@
     "tslint-react-a11y": "^1.0.0",
     "tslint-react-hooks": "^1.1.0",
     "typescript": "^3.3.3",
-    "uglifyjs-webpack-plugin": "^2.1.1",
     "webpack": "^4.29.4",
-    "webpack-cli": "^3.2.3"
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.0"
   }
 }

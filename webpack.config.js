@@ -26,4 +26,12 @@ module.exports = {
     modules: ['src', 'node_modules'],
     extensions: ['.js', '.ts', '.tsx'],
   },
+
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 9000,
+    hot: true,
+    open: true,
+  },
 };

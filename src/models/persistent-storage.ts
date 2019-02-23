@@ -24,4 +24,3 @@ export function fromPersistentStorage<T>(key: string, fallback: T): T {
 export function toPersistentStorage<T>(key: string, value: T) {
   localStorage.setItem(key, JSON.stringify(value));
 }
-
