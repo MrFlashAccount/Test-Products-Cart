@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { css } from 'astroturf';
 
 export interface GridProps {}
 
-export const Grid = React.memo<GridProps>(({ children }) => {
+export const Grid: FC<GridProps> = ({ children }) => {
   return (
     <ul className={styles.list}>
       {React.Children.map(children, ch => {
@@ -11,7 +11,7 @@ export const Grid = React.memo<GridProps>(({ children }) => {
       })}
     </ul>
   );
-});
+};
 
 const styles = css`
   .list {

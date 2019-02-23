@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useProperty } from 'hooks/useProperty';
 import coupons from 'stores/coupons';
 import cart from 'stores/cart';
-import { css } from 'astroturf';
 import { WithoutPrint } from 'components/partial/print';
 
 /**

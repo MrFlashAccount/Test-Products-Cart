@@ -10,11 +10,6 @@ import { Amount } from '../partial/amount';
  * Карточка товара
  */
 export const ProductCard = memo<{ product: Product }>(({ product }) => {
-  const [inCart] = useProperty(
-    cart.pCart.map(([current]) => !!current.items.find(({ id }) => id === product.id)).skipDuplicates(),
-    false
-  );
-
   return (
     <div className={styles.card}>
       <img className={styles.logo} src={product.picture} alt={product.name} height={150} />
@@ -23,18 +18,26 @@ export const ProductCard = memo<{ product: Product }>(({ product }) => {
         <h3 className={styles.title}>{product.name}</h3>
 
         <Amount amount={product.price} extraClass={styles.price} />
-
-        {!inCart ? (
-          <Button onClick={() => cart.addToCart(product.id)}>Добавить в корзину</Button>
-        ) : (
-          <>
-            <Button buttonStyle="null" onClick={() => cart.removeFromCart(product.id)}>
-              Удалить из корзины
-            </Button>
-          </>
-        )}
+        <InCartBlock product_id={product.id} />
       </div>
     </div>
+  );
+});
+
+const InCartBlock = memo<{ product_id: number }>(({ product_id }) => {
+  const [inCart] = useProperty(
+    cart.pCart.map(([current]) => !!current.items.find(({ id }) => id === product_id)).skipDuplicates(),
+    false
+  );
+
+  return inCart ? (
+    <Button key="cart" buttonStyle="null" onClick={() => cart.removeFromCart(product_id)}>
+      Удалить из корзины
+    </Button>
+  ) : (
+    <Button key="cart" onClick={() => cart.addToCart(product_id)}>
+      Добавить в корзину
+    </Button>
   );
 });
 
