@@ -21,6 +21,14 @@ export function fromPersistentStorage<T>(key: string, fallback: T): T {
   }
 }
 
+/**
+ * Сохраняет данные во внутреннее хранилище
+ *
+ * @export
+ * @template T
+ * @param {string} key ключ, по которому сохранятся данные
+ * @param {T} value значение, которое нужно сохранить
+ */
 export function toPersistentStorage<T>(key: string, value: T) {
   localStorage.setItem(key, JSON.stringify(value));
 }
