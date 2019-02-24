@@ -16,7 +16,7 @@ export type CartItem = {
 };
 
 export class Cart implements IHistory {
-  readonly persistentStorageKey = 'cart';
+  readonly persistentStorageKey = 'test_MrFlashAccount_cart';
   /**
    * Поток со всей информацией о корзине, включая ее прошлое и будущее
    *
