@@ -54,9 +54,9 @@ function getDiscountFromProduct({ items, coupon }: CouponKindParams) {
   const couponProduct = items.find(item => item.id === coupon.productID);
 
   if (couponProduct) {
-    const amount = couponProduct.count * couponProduct.productInfo.price;
-
-    return byCouponType[coupon.type]({ coupon, amount });
+    return (
+      byCouponType[coupon.type]({ coupon, amount: couponProduct.productInfo.price }) * couponProduct.count
+    );
   }
 
   return 0;
