@@ -1,16 +1,13 @@
 import { css } from 'astroturf';
+import { WithoutPrint, WithPrint } from 'components/partial/print';
 import { useProperty } from 'hooks/useProperty';
-import { productsInCart } from 'models/products-in-cart';
 import React, { memo } from 'react';
 import cart from 'stores/cart';
-import coupons from 'stores/coupons';
-import { products } from 'stores/products';
-import { Button, MemoizedButton } from '../partial/button';
+import { MemoizedButton } from '../partial/button';
 import { CartTotal } from './cart-total';
 import { CouponsList } from './coupons-list';
 import { ProductCartList } from './product-cart-list';
 import { SelectedCoupon } from './selected-coupon';
-import { WithoutPrint, WithPrint } from 'components/partial/print';
 
 /**
  * Страница с корзиной
@@ -68,25 +65,26 @@ const UndoRedo = memo(() => {
 });
 
 const CartContent = memo(() => {
-  const pProductsInCart = productsInCart(products.pProducts, coupons.pCoupons, cart.pCurrentCart);
-  const [inCartProducts] = useProperty(pProductsInCart, undefined);
-
   return (
     <>
-      {inCartProducts && <ProductCartList products={inCartProducts.items} />}
-
+      <ProductCartList />
       <CouponsList />
-      <SelectedCoupon pProductsInCart={pProductsInCart} />
-      <CartTotal pProductsInCart={pProductsInCart} />
-
-      {inCartProducts && inCartProducts.items.length > 0 && (
-        <MemoizedButton onClick={window.print}>Распечатать чек</MemoizedButton>
-      )}
+      <SelectedCoupon />
+      <CartTotal />
+      <PrintButton />
     </>
   );
 });
 
-// tslint:disable
+const PrintButton = () => {
+  const [hasProducts] = useProperty(
+    cart.pCurrentCart.map(({ items }) => items.length > 0).skipDuplicates(),
+    false
+  );
+
+  return hasProducts ? <MemoizedButton onClick={window.print}>Распечатать чек</MemoizedButton> : null;
+};
+
 const styles = css`
   .header {
     display: flex;

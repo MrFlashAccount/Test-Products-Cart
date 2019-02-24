@@ -1,26 +1,33 @@
-import React, { memo } from 'react';
-import { ProductInCart } from 'models/products-in-cart';
-import { ProductCartItem } from './product-cart-item';
 import { css } from 'astroturf';
 import { WithoutPrint } from 'components/partial/print';
+import { useProperty } from 'hooks/useProperty';
+import React, { memo } from 'react';
+import cart from 'stores/cart';
+import { ProductCartItem } from './product-cart-item';
 
-interface ProductCartListProps {
-  products: ProductInCart[];
-}
-
-export const ProductCartList = memo<ProductCartListProps>(({ products }) => {
+export const ProductCartList = memo(() => {
   return (
     <section>
       <table className={styles.list}>
-        <tbody>
-          {products.length > 0 ? (
-            products.map(product => <ProductCartItem key={product.id} product={product} />)
-          ) : (
-            <Empty />
-          )}
-        </tbody>
+        <Content />
       </table>
     </section>
+  );
+});
+
+ProductCartList['whyDidYouRender'] = true;
+
+const Content = memo(() => {
+  const [cartItems] = useProperty(cart.pCurrentCart.map(cart => cart.items), []);
+
+  return (
+    <tbody>
+      {cartItems.length > 0 ? (
+        cartItems.map(item => <ProductCartItem key={item.id} item={item} />)
+      ) : (
+        <Empty />
+      )}
+    </tbody>
   );
 });
 

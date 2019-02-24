@@ -10,6 +10,7 @@
   "author": "Sergey Garin",
   "license": "ISC",
   "dependencies": {
+    "immer": "^2.0.0",
     "kefir": "^3.8.6",
     "react": "^16.8.3",
     "react-dom": "^16.8.3"

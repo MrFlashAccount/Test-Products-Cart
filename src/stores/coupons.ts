@@ -1,6 +1,8 @@
 import data from 'data/coupons.json';
 import { Property } from 'kefir';
 import { property } from 'core/utils';
+import { KeyMap } from 'types';
+import { arrayToObject } from 'helpers/array-to-object';
 
 export type Coupon = CartCoupon | ProductCoupon;
 
@@ -30,9 +32,11 @@ type CommonCouponFields = {
 
 export class Coupons {
   pCoupons: Property<Coupon[], never>;
+  pCouponsMap: Property<KeyMap<Coupon>, never>;
 
   constructor() {
     [this.pCoupons] = property<Coupon[]>(data as Coupon[]);
+    this.pCouponsMap = this.pCoupons.map(cs => arrayToObject(cs, 'id'));
   }
 }
 

@@ -8,29 +8,34 @@ import { Property } from 'kefir';
 import { products, Product } from 'stores/products';
 import { Amount } from '../partial/amount';
 import { ObjectMap } from 'types';
-import { Coupon } from 'stores/coupons';
-
-export interface SelectedCouponProps {
-  pProductsInCart: Property<ProductsInCart, any>;
-}
+import coupons, { Coupon } from 'stores/coupons';
 
 /**
  * Выводит информацию о текущем выбранном купоне
  */
-export const SelectedCoupon = memo<SelectedCouponProps>(({ pProductsInCart }) => {
-  const [coupon] = useProperty(pProductsInCart.map(productsInCart => productsInCart.coupon), undefined);
-  const [allProducts] = useProperty(products.pProducts, undefined);
+export const SelectedCoupon = memo(() => {
+  const [selectedCouponID] = useProperty(
+    cart.pCurrentCart.map(({ coupon }) => coupon).skipDuplicates(),
+    undefined
+  );
+  const [couponsMap] = useProperty(coupons.pCouponsMap, undefined);
+  const [allProductsMap] = useProperty(products.pProductsMap, undefined);
 
   let couponProduct: Product | undefined = undefined;
+  let selectedCoupon: Coupon | undefined = undefined;
 
-  if (coupon && coupon.kind === 'product' && allProducts) {
-    couponProduct = allProducts.find(product => product.id === coupon.productID);
+  if (selectedCouponID && couponsMap) {
+    selectedCoupon = couponsMap[selectedCouponID];
   }
 
-  return coupon ? (
+  if (selectedCoupon && selectedCoupon.kind === 'product' && allProductsMap) {
+    couponProduct = allProductsMap[selectedCoupon.productID];
+  }
+
+  return selectedCoupon ? (
     <>
       <section className={styles.coupon}>
-        <h4>Выбран купон: {coupon.id}</h4>
+        <h4>Выбран купон: {selectedCoupon.id}</h4>
 
         <MemoizedButton
           buttonStyle="null"
@@ -42,8 +47,15 @@ export const SelectedCoupon = memo<SelectedCouponProps>(({ pProductsInCart }) =>
       </section>
 
       <section>
-        <p>Скидка: {coupon.type === 'fixed' ? <Amount amount={coupon.amount} /> : `${coupon.amount}%`}</p>
-        <p>Применение купона: {couponKindToHumanFormat[coupon.kind]}</p>
+        <p>
+          Скидка:{' '}
+          {selectedCoupon.type === 'fixed' ? (
+            <Amount amount={selectedCoupon.amount} />
+          ) : (
+            `${selectedCoupon.amount}%`
+          )}
+        </p>
+        <p>Применение купона: {couponKindToHumanFormat[selectedCoupon.kind]}</p>
         {couponProduct && <p>Применяется к товару: {couponProduct.name}</p>}
       </section>
     </>

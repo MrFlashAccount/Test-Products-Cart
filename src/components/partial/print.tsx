@@ -1,13 +1,13 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { css } from 'astroturf';
 
-export const WithPrint: FC = ({ children }) => {
+export const WithPrint: FC = memo(({ children }) => {
   return <span className={styles.withprint}>{children}</span>;
-};
+});
 
-export const WithoutPrint: FC = ({ children }) => {
+export const WithoutPrint: FC = memo(({ children }) => {
   return <span className={styles.withoutprint}>{children}</span>;
-};
+});
 
 const styles = css`
   .withprint {

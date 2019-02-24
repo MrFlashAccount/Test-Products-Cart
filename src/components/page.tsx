@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { ProductsList } from 'components/products/products-list';
 import { css } from 'astroturf';
-import { TopBar } from './topbar';
-import { Cart } from './cart/cart';
+import React, { useState } from 'react';
 import { ObjectMap } from 'types';
+import { Cart } from './cart/cart';
 import { SaveToStorage } from './partial/save-to-storage';
+import { ProductsList } from './products/products-list';
+import { TopBar } from './topbar';
 
 export type PageType = 'list' | 'cart';
 

@@ -4,6 +4,7 @@ import { HistoryProperty, propertyWithHistory } from 'core/utils';
 import { Coupon } from './coupons';
 import { Property } from 'kefir';
 import { fromPersistentStorage } from 'models/persistent-storage';
+import { produce } from 'immer';
 
 export type CartState = {
   items: CartItem[];
@@ -42,26 +43,23 @@ export class Cart implements IHistory {
   }
 
   updateCount = (id: number, count: number) => {
-    this._eCart.patch(state => {
-      const items = state.items.slice(0);
-      const indexOfItem = items.findIndex(item => item.id === id);
+    this._eCart.patch(state =>
+      produce(state, draft => {
+        const indexOfItem = draft.items.findIndex(item => item.id === id);
 
-      if (indexOfItem !== -1) {
-        items[indexOfItem] = {
-          ...items[indexOfItem],
-          count,
-        };
-      }
-
-      return { ...state, items };
-    });
+        if (indexOfItem !== -1) {
+          draft.items[indexOfItem].count = count;
+        }
+      })
+    );
   };
 
   addToCart = (itemOrID: number | CartItem) => {
-    this._eCart.patch(state => ({
-      ...state,
-      items: [...state.items, typeof itemOrID === 'object' ? itemOrID : { id: itemOrID, count: 1 }],
-    }));
+    this._eCart.patch(state =>
+      produce(state, draft => {
+        draft.items.push(typeof itemOrID === 'object' ? itemOrID : { id: itemOrID, count: 1 });
+      })
+    );
   };
 
   removeFromCart = (id: number) => {
@@ -69,7 +67,12 @@ export class Cart implements IHistory {
   };
 
   addCoupon = (couponID: Coupon['id']) => {
-    this._eCart.patch(state => ({ ...state, coupon: couponID }));
+    this._eCart.patch(state =>
+      produce(state, draft => {
+        draft.coupon = couponID;
+      })
+    );
+    
   };
 
   removeCoupon = () => {
