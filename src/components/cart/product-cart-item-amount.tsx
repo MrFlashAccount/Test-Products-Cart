@@ -12,8 +12,9 @@ export const ProductCartItemAmount = memo<ProductCartItemAmount>(({ count, maxCo
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.valueAsNumber;
-    const clamped = Math.max(Math.min(maxCount, value), minCount);
+    if (isNaN(value)) return;
 
+    const clamped = Math.max(Math.min(maxCount, value), minCount);
     updateCount(clamped);
   }
 
