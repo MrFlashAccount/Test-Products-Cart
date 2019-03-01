@@ -19,11 +19,11 @@ export class HistoryEmitter<T, S = never> extends PersistentEmitter<T, S> implem
   pFuture: Property<T[], S>;
   private _eFuture: PersistentEmitter<T[], S>;
 
-  constructor(initial: T) {
+  constructor(initial: T, initialPast: T[], initialFuture: T[]) {
     super(initial);
 
-    [this.pPast, this._ePast] = property<T[]>([]);
-    [this.pFuture, this._eFuture] = property<T[]>([]);
+    [this.pPast, this._ePast] = property<T[]>(initialPast);
+    [this.pFuture, this._eFuture] = property<T[]>(initialFuture);
   }
 
   set(value: T) {

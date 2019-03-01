@@ -34,9 +34,12 @@ export class Cart implements IHistory {
   private _eCart: HistoryEmitter<CartState>;
 
   constructor() {
-    [this.pCart, this._eCart, this.history] = propertyWithHistory<CartState>(
-      fromPersistentStorage(this.persistentStorageKey, { items: [] })
+    const prevState = fromPersistentStorage<[CartState, CartState[], CartState[]]>(
+      this.persistentStorageKey,
+      [{ items: [] }, [], []]
     );
+
+    [this.pCart, this._eCart, this.history] = propertyWithHistory<CartState>(...prevState);
 
     this.pCurrentCart = this.pCart.map(([current]) => current);
   }

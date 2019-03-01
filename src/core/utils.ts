@@ -7,16 +7,22 @@ export type HistoryProperty<T, S> = Property<[T, T[], T[]], S>;
 
 /**
  * Создает постоянный поток, который хранит историю своего изменения.
- *
- * @export
+ * ***
  * @template T - тип хранимых данных
  * @template S - тип ошибки
+ * ***
  * @param {T} initial - начальное значение
+ * @param {T[]} [pastInitial=[]] - начальное значение прошлого
+ * @param {T[]} [futureInitial=[]] - начальное значение будущего
  */
 export function propertyWithHistory<T, S = never>(
-  initial: T
+  initial: T,
+  pastInitial: T[] = [],
+  futureInitial: T[] = []
 ): [HistoryProperty<T, S>, HistoryEmitter<T, S>, History] {
-  const [pCurrent, emitter] = createProperty<HistoryEmitter<T, S>, T, S>(new HistoryEmitter(initial));
+  const [pCurrent, emitter] = createProperty<HistoryEmitter<T, S>, T, S>(
+    new HistoryEmitter(initial, pastInitial, futureInitial)
+  );
 
   return [
     combine([pCurrent, emitter.pPast, emitter.pFuture])
@@ -34,7 +40,6 @@ export function propertyWithHistory<T, S = never>(
 /**
  * Создает постоянный поток
  *
- * @export
  * @template T - тип хранимых данных
  * @template S - тип ошибки
  * @param {T} initial - начальное значение
