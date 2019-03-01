@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { useProperty } from 'hooks/useProperty';
+import { useImmediateProperty } from 'hooks/useProperty';
 import cart from 'stores/cart';
 import { css } from 'astroturf';
 import { Button, MemoizedButton } from '../partial/button';
@@ -18,12 +18,12 @@ export interface SelectedCouponProps {
  * Выводит информацию о текущем выбранном купоне
  */
 export const SelectedCoupon = memo<SelectedCouponProps>(({ pProductsInCart }) => {
-  const [coupon] = useProperty(pProductsInCart.map(productsInCart => productsInCart.coupon), undefined);
-  const [allProducts] = useProperty(products.pProducts, undefined);
+  const [coupon] = useImmediateProperty(pProductsInCart.map(productsInCart => productsInCart.coupon));
+  const [allProducts] = useImmediateProperty(products.pProducts);
 
   let couponProduct: Product | undefined = undefined;
 
-  if (coupon && coupon.kind === 'product' && allProducts) {
+  if (coupon && coupon.kind === 'product') {
     couponProduct = allProducts.find(product => product.id === coupon.productID);
   }
 

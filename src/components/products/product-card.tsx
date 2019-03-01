@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Product } from 'stores/products';
 import { css } from 'astroturf';
 import cart from 'stores/cart';
-import { useProperty } from 'hooks/useProperty';
+import { useImmediateProperty } from 'hooks/useProperty';
 import { Button } from '../partial/button';
 import { Amount } from '../partial/amount';
 
@@ -25,9 +25,8 @@ export const ProductCard = memo<{ product: Product }>(({ product }) => {
 });
 
 const InCartBlock = memo<{ product_id: number }>(({ product_id }) => {
-  const [inCart] = useProperty(
-    cart.pCart.map(([current]) => !!current.items.find(({ id }) => id === product_id)).skipDuplicates(),
-    false
+  const [inCart] = useImmediateProperty(
+    cart.pCart.map(([current]) => !!current.items.find(({ id }) => id === product_id)).skipDuplicates()
   );
 
   return inCart ? (

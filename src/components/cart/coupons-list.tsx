@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { useProperty } from 'hooks/useProperty';
-import coupons from 'stores/coupons';
-import cart from 'stores/cart';
 import { WithoutPrint } from 'components/partial/print';
+import { useImmediateProperty } from 'hooks/useProperty';
+import React, { useState } from 'react';
+import cart from 'stores/cart';
+import coupons from 'stores/coupons';
 
 /**
  * Компонент с выбором купонов
  */
 export const CouponsList = React.memo(() => {
-  const [couponsList] = useProperty(coupons.pCoupons, undefined);
+  const [couponsList] = useImmediateProperty(coupons.pCoupons);
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState<string | undefined>(undefined);
 

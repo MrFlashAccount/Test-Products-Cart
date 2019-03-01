@@ -16,26 +16,13 @@ export const ProductCartItem = memo<{ product: ProductInCart }>(({ product }) =>
 
   return (
     <tr className={styles.item}>
-      <td className={styles.bycontent}>
-        <WithoutPrint>
-          <img
-            className={styles.icon}
-            src={product.productInfo.picture}
-            alt={`Логотип ${product.productInfo.name}`}
-            height={100}
-            width={100}
-          />
-        </WithoutPrint>
-      </td>
+      <Logo name={product.productInfo.name} picture={product.productInfo.picture} />
 
-      <td className={`${styles.description}`}>
-        <h3 className={styles.name}>{product.productInfo.name}</h3>
-        <WithoutPrint>
-          <p className={styles.max}>Всего штук: {product.productInfo.count}</p>
-        </WithoutPrint>
-
-        <Amount extraClass={styles.price} amount={product.productInfo.price} />
-      </td>
+      <ItemInfo
+        name={product.productInfo.name}
+        count={product.productInfo.count}
+        price={product.productInfo.price}
+      />
 
       <td className={styles.row}>
         <ProductCartItemAmount
@@ -61,6 +48,37 @@ export const ProductCartItem = memo<{ product: ProductInCart }>(({ product }) =>
     </tr>
   );
 });
+
+interface ItemInfoProps {
+  name: string;
+  count: number;
+  price: number;
+}
+
+interface LogoProps {
+  picture: string;
+  name: string;
+}
+
+const Logo = memo<LogoProps>(({ name, picture }) => (
+  <td className={styles.bycontent}>
+    <WithoutPrint>
+      <img className={styles.icon} src={picture} alt={`Логотип ${name}`} height={80} width={80} />
+    </WithoutPrint>
+  </td>
+));
+
+const ItemInfo = memo<ItemInfoProps>(({ name, count, price }) => (
+  <td className={`${styles.description}`}>
+    <h3 className={styles.name}>{name}</h3>
+
+    <WithoutPrint>
+      <p className={styles.max}>Всего штук: {count}</p>
+    </WithoutPrint>
+
+    <Amount extraClass={styles.price} amount={price} />
+  </td>
+));
 
 const styles = css`
   .item {

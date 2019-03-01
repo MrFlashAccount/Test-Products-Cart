@@ -1,6 +1,6 @@
 import { History, IHistory } from 'core/history';
 import { HistoryEmitter } from 'core/history-emitter';
-import { HistoryProperty, propertyWithHistory } from 'core/utils';
+import { HistoryProperty, propertyWithHistory } from 'core/property';
 import { Coupon } from './coupons';
 import { Property } from 'kefir';
 import { fromPersistentStorage } from 'models/persistent-storage';

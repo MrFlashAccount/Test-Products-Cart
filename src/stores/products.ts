@@ -1,5 +1,5 @@
 import { Property } from 'kefir';
-import { property } from 'core/utils';
+import { property } from 'core/property';
 import data from 'data/products.json';
 
 export type Product = {

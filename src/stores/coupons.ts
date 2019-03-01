@@ -1,6 +1,6 @@
 import data from 'data/coupons.json';
 import { Property } from 'kefir';
-import { property } from 'core/utils';
+import { property } from 'core/property';
 
 export type Coupon = CartCoupon | ProductCoupon;
 

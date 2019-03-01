@@ -1,7 +1,7 @@
 import React from 'react';
 import { products } from 'stores/products';
 import { ProductCard } from 'components/products/product-card';
-import { useProperty } from 'hooks/useProperty';
+import { useImmediateProperty } from 'hooks/useProperty';
 import { Grid } from '../partial/grid';
 
 /**
@@ -22,7 +22,7 @@ export const ProductsList = React.memo(() => {
 });
 
 const List = () => {
-  const [productsList] = useProperty(products.pProducts, undefined);
+  const [productsList] = useImmediateProperty(products.pProducts);
 
   return productsList ? (
     <Grid>

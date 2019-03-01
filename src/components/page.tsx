@@ -1,30 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ProductsList } from 'components/products/products-list';
 import { css } from 'astroturf';
 import { TopBar } from './topbar';
 import { Cart } from './cart/cart';
-import { ObjectMap } from 'types';
+import { NoMatch } from './no-match';
 import { SaveToStorage } from './partial/save-to-storage';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { ScrollToTop } from './partial/scroll-to-top';
 
-export type PageType = 'list' | 'cart';
-
-const componentByPageType: ObjectMap<PageType, JSX.Element> = {
-  cart: <Cart />,
-  list: <ProductsList />,
-};
-
-export const Page = () => {
-  const [page, setPage] = useState<PageType>('list');
-
-  return (
+export const Page = () => (
+  <Router>
     <div className={styles.layout}>
-      <TopBar onNavigate={setPage} />
-      <main className={styles.main}>{componentByPageType[page]}</main>
+      <TopBar />
+
+      <main className={styles.main}>
+        <Switch>
+          <Route path="/" exact component={ProductsList} />
+          <Route path="/cart/" component={Cart} />
+          <Route component={NoMatch} />
+        </Switch>
+      </main>
 
       <SaveToStorage />
+      <ScrollToTop />
     </div>
-  );
-};
+  </Router>
+);
 
 const styles = css`
   html {
@@ -34,6 +35,7 @@ const styles = css`
   body {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
+    font-display: swap;
   }
 
   *,

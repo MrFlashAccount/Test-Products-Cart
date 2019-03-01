@@ -1,6 +1,6 @@
 import { PersistentEmitter } from './persistent-emitter';
 import { Property } from 'kefir';
-import { property } from './utils';
+import { property } from './property';
 import { IHistorySlider } from './history';
 
 /**

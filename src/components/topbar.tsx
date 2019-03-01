@@ -1,23 +1,19 @@
 import React, { memo } from 'react';
 import { css } from 'astroturf';
-import { PageType } from './page';
-import { Button } from './partial/button';
 import { WithoutPrint } from './partial/print';
+import { Link } from './partial/link';
 
-export const TopBar = memo<{ onNavigate: (type: PageType) => void }>(({ onNavigate }) => {
+export const TopBar = memo(() => {
   return (
     <WithoutPrint>
       <nav className={styles.header}>
         <ul className={styles.list}>
           <li className={styles.item}>
-            <Button extraClass={styles.button} buttonStyle={'null'} onClick={() => onNavigate('list')}>
-              Список товаров
-            </Button>
+            <Link to="/">Список товаров</Link>
           </li>
+
           <li className={styles.item}>
-            <Button extraClass={styles.button} buttonStyle={'null'} onClick={() => onNavigate('cart')}>
-              Корзина
-            </Button>
+            <Link to="/cart">Корзина</Link>
           </li>
         </ul>
       </nav>
@@ -56,11 +52,5 @@ const styles = css`
     &:not(:last-child) {
       margin-right: 10px;
     }
-  }
-
-  .button {
-    width: auto;
-
-    font-size: 18px;
   }
 `;

@@ -1,5 +1,6 @@
 import { css } from 'astroturf';
-import { useProperty } from 'hooks/useProperty';
+import { WithoutPrint, WithPrint } from 'components/partial/print';
+import { useImmediateProperty } from 'hooks/useProperty';
 import { productsInCart } from 'models/products-in-cart';
 import React, { memo } from 'react';
 import cart from 'stores/cart';
@@ -10,7 +11,6 @@ import { CartTotal } from './cart-total';
 import { CouponsList } from './coupons-list';
 import { ProductCartList } from './product-cart-list';
 import { SelectedCoupon } from './selected-coupon';
-import { WithoutPrint, WithPrint } from 'components/partial/print';
 
 /**
  * Страница с корзиной
@@ -38,11 +38,10 @@ export const Cart = React.memo(() => {
 });
 
 const UndoRedo = memo(() => {
-  const [[canUndo, canRedo]] = useProperty<[boolean, boolean], never>(
+  const [[canUndo, canRedo]] = useImmediateProperty<[boolean, boolean], never>(
     cart.pCart
       .map(([_, prev, future]) => [prev.length > 0, future.length > 0] as [boolean, boolean])
-      .skipDuplicates((v1, v2) => v1[0] === v2[0] && v1[1] === v2[1]),
-    [false, false]
+      .skipDuplicates((v1, v2) => v1[0] === v2[0] && v1[1] === v2[1])
   );
 
   return (
@@ -69,7 +68,7 @@ const UndoRedo = memo(() => {
 
 const CartContent = memo(() => {
   const pProductsInCart = productsInCart(products.pProducts, coupons.pCoupons, cart.pCurrentCart);
-  const [inCartProducts] = useProperty(pProductsInCart, undefined);
+  const [inCartProducts] = useImmediateProperty(pProductsInCart);
 
   return (
     <>

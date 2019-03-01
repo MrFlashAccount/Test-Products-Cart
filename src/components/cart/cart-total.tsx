@@ -1,9 +1,9 @@
 import { css } from 'astroturf';
+import { useImmediateProperty } from 'hooks/useProperty';
+import { Property } from 'kefir';
+import { cartTotal, ProductsInCart } from 'models/products-in-cart';
 import React, { memo } from 'react';
 import { Amount } from '../partial/amount';
-import { useProperty } from 'hooks/useProperty';
-import { cartTotal, ProductsInCart } from 'models/products-in-cart';
-import { Property } from 'kefir';
 
 export interface CartTotalProps {
   pProductsInCart: Property<ProductsInCart, any>;
@@ -13,9 +13,9 @@ export interface CartTotalProps {
  * Сумма корзины с промежуточным итогом и величиной скидки
  */
 export const CartTotal = memo<CartTotalProps>(({ pProductsInCart }) => {
-  const [total] = useProperty(cartTotal(pProductsInCart), undefined);
+  const [total] = useImmediateProperty(cartTotal(pProductsInCart));
 
-  return total ? (
+  return (
     <div className={styles.wrap}>
       <p>
         Сумма: <Amount amount={total.amount} />
@@ -29,11 +29,15 @@ export const CartTotal = memo<CartTotalProps>(({ pProductsInCart }) => {
         Итог: <Amount amount={total.total} />
       </p>
     </div>
-  ) : null;
+  );
 });
 
 const styles = css`
   .wrap {
     padding: 16px 0;
+
+    @media print {
+      padding: 16px 0 0;
+    }
   }
 `;
