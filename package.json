@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Тестовое задание",
   "scripts": {
-    "start": "webpack-dev-server --mode development --config webpack.config.js --progress --color",
+    "start": "npm run server:dev",
+    "server:dev": "webpack-dev-server --mode development --config webpack.config.js --progress --color",
+    "server:prod": "webpack-dev-server --mode production --config webpack.config.js --progress --color",
     "build:dev": "webpack --mode development --config webpack.config.js --progress --color",
     "build:prod": "webpack --mode production --config webpack.config.js --progress --color",
     "bundleanalyze": "npm run build:prod -- --env.config=analyze",

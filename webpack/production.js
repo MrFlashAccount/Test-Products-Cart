@@ -20,13 +20,13 @@ module.exports = (env, options) =>
       mode: 'production',
 
       output: {
-        filename: '[name].[contenthash].js',
+        filename: '[name].[hash].js',
       },
 
       plugins: [
         new MiniCssExtractPlugin({
-          filename: '[name]_[contenthash].css',
-          chunkFilename: '[id]_[contenthash].css',
+          filename: '[name].[hash].css',
+          chunkFilename: '[id].[hash].css',
         }),
         new OptimizeCSSAssetsPlugin({}),
       ],
