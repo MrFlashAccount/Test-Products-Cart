@@ -44,7 +44,7 @@ const styles = css`
 
     &.primary {
       color: #fff;
-      background: #17c486;
+      background: #3f51b5;
     }
 
     &.null {

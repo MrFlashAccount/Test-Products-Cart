@@ -1,10 +1,11 @@
 import { css } from 'astroturf';
-import React, { Suspense, lazy, StrictMode } from 'react';
+import React, { Suspense, StrictMode } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ErrorCatcher } from './partial/error-catcher';
 import { SaveToStorage } from './partial/save-to-storage';
 import { ScrollToTop } from './partial/scroll-to-top';
 import { TopBar } from './topbar';
+import { lazy } from './partial/lazy';
 
 export const Page = () => (
   <StrictMode>
@@ -39,11 +40,9 @@ export const Page = () => (
   </StrictMode>
 );
 
-const LazyProductsList = lazy(() =>
-  import('components/products/products-list').then(({ ProductsList }) => ({ default: ProductsList }))
-);
-const LazyCart = lazy(() => import('./cart/cart').then(({ Cart }) => ({ default: Cart })));
-const LazyNoMatch = lazy(() => import('./no-match').then(({ NoMatch }) => ({ default: NoMatch })));
+const LazyProductsList = lazy(() => import('components/products/products-list'), 'ProductsList');
+const LazyCart = lazy(() => import('./cart/cart'), 'Cart');
+const LazyNoMatch = lazy(() => import('./no-match'), 'NoMatch');
 
 const styles = css`
   html {

@@ -48,7 +48,7 @@ const styles = css`
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.2);
-      color: #17c486;
+      color: #3f51b5;
     }
 
     &:visited {
@@ -58,7 +58,7 @@ const styles = css`
     &:active,
     &:focus,
     &:active:focus {
-      color: #11b083;
+      color: #3f51b5;
       background-color: rgba(255, 255, 255, 0.3);
     }
   }

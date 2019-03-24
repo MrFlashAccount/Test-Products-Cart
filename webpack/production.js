@@ -1,7 +1,9 @@
 const merge = require('webpack-merge');
 const common = require('./common');
+
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const Critters = require('critters-webpack-plugin');
 
 module.exports = (env, options) =>
   merge.smart(
@@ -29,6 +31,10 @@ module.exports = (env, options) =>
           chunkFilename: '[id].[hash].css',
         }),
         new OptimizeCSSAssetsPlugin({}),
+        new Critters({
+          preload: 'swap',
+          preloadFonts: true,
+        }),
       ],
 
       optimization: {
