@@ -1,31 +1,49 @@
-import React from 'react';
-import { ProductsList } from 'components/products/products-list';
 import { css } from 'astroturf';
-import { TopBar } from './topbar';
-import { Cart } from './cart/cart';
-import { NoMatch } from './no-match';
-import { SaveToStorage } from './partial/save-to-storage';
+import React, { Suspense, lazy, StrictMode } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { ErrorCatcher } from './partial/error-catcher';
+import { SaveToStorage } from './partial/save-to-storage';
 import { ScrollToTop } from './partial/scroll-to-top';
+import { TopBar } from './topbar';
 
 export const Page = () => (
-  <Router>
-    <div className={styles.layout}>
-      <TopBar />
+  <StrictMode>
+    <Router>
+      <div className={styles.layout}>
+        <TopBar />
 
-      <main className={styles.main}>
-        <Switch>
-          <Route path="/" exact component={ProductsList} />
-          <Route path="/cart/" component={Cart} />
-          <Route component={NoMatch} />
-        </Switch>
-      </main>
+        <main className={styles.main}>
+          <ErrorCatcher>
+            <Suspense fallback="Загрузка...">
+              <Switch>
+                <Route path="/" exact>
+                  <LazyProductsList />
+                </Route>
 
-      <SaveToStorage />
-      <ScrollToTop />
-    </div>
-  </Router>
+                <Route path="/cart/">
+                  <LazyCart />
+                </Route>
+
+                <Route>
+                  <LazyNoMatch />
+                </Route>
+              </Switch>
+            </Suspense>
+          </ErrorCatcher>
+        </main>
+
+        <SaveToStorage />
+        <ScrollToTop />
+      </div>
+    </Router>
+  </StrictMode>
 );
+
+const LazyProductsList = lazy(() =>
+  import('components/products/products-list').then(({ ProductsList }) => ({ default: ProductsList }))
+);
+const LazyCart = lazy(() => import('./cart/cart').then(({ Cart }) => ({ default: Cart })));
+const LazyNoMatch = lazy(() => import('./no-match').then(({ NoMatch }) => ({ default: NoMatch })));
 
 const styles = css`
   html {

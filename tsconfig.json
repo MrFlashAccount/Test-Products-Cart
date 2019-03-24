@@ -6,7 +6,7 @@
     "esModuleInterop": true,
     "pretty": true,
     "target": "es6",
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
     "jsx": "react",
     "baseUrl": "./src",
