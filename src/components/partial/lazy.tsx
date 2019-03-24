@@ -1,14 +1,13 @@
 import { lazy as ReactLazy, ComponentClass, FunctionComponent } from 'react';
 
 /**
- * 
+ * Лениво загружает компонент
+ * Разворачивает named export в default, чтобы его "скушал" React'овский lazy
  *
  * @export
- * @template T
- * @template K
- * @param factory
- * @param key
- * @returns
+ * @param factory - функция, возвращающая анихронный импорт
+ * @param key - имя компонента
+ * @returns компонент, который асинхронно себя инициализирует
  */
 export function lazy<T extends {}, K extends keyof T>(
   factory: () => Promise<T>,
