@@ -1,18 +1,19 @@
 import { lazy as ReactLazy, ComponentClass, FunctionComponent } from 'react';
 
+type ComponentType<T = any> = ComponentClass<T> | FunctionComponent<T>;
+
 /**
  * Лениво загружает компонент
  * Разворачивает named export в default, чтобы его "скушал" React'овский lazy
  *
  * @export
- * @param factory - функция, возвращающая анихронный импорт
+ * @param factory - функция, возвращающая асинхронный импорт
  * @param key - имя компонента
  * @returns компонент, который асинхронно себя инициализирует
  */
-export function lazy<T extends {}, K extends keyof T>(
+export function lazy<T extends { [V in K]: ComponentType }, K extends keyof T>(
   factory: () => Promise<T>,
-  key: T[K] extends (ComponentClass<any> | FunctionComponent<any>) ? K : never
+  key: K
 ) {
-  // TODO: разобраться с типизацией, сейчас, к сожалению, не вышло объяснить тайпскрипту, что T[K] - typeof ComponentClass | FunctionComponent
-  return ReactLazy(() => factory().then(imp => ({ default: imp[key] as any })));
+  return ReactLazy(() => factory().then(imp => ({ default: imp[key] })));
 }
