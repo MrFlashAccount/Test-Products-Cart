@@ -7,6 +7,10 @@ import { ScrollToTop } from './partial/scroll-to-top';
 import { TopBar } from './topbar';
 import { lazy } from './partial/lazy';
 
+const LazyProductsList = lazy(() => import('components/products/products-list'), 'ProductsList');
+const LazyCart = lazy(() => import('./cart/cart'), 'Cart');
+const LazyNoMatch = lazy(() => import('./no-match'), 'NoMatch');
+
 export const Page = () => (
   <StrictMode>
     <Router>
@@ -39,10 +43,6 @@ export const Page = () => (
     </Router>
   </StrictMode>
 );
-
-const LazyProductsList = lazy(() => import('components/products/products-list'), 'ProductsList');
-const LazyCart = lazy(() => import('./cart/cart'), 'Cart');
-const LazyNoMatch = lazy(() => import('./no-match'), 'NoMatch');
 
 const styles = css`
   html {

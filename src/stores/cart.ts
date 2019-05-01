@@ -3,7 +3,7 @@ import { HistoryEmitter } from 'core/history-emitter';
 import { HistoryProperty, propertyWithHistory } from 'core/property';
 import { Coupon } from './coupons';
 import { Property } from 'kefir';
-import { fromPersistentStorage } from 'models/persistent-storage';
+import { fromPersistentStorage } from 'core/utils/persistent-storage';
 
 export type CartState = {
   items: CartItem[];

@@ -1,9 +1,9 @@
-import { combine, Property, stream } from 'kefir';
+import * as kefir from 'kefir';
 import { History } from './history';
 import { HistoryEmitter } from './history-emitter';
 import { PersistentEmitter } from './persistent-emitter';
 
-export type HistoryProperty<T, S> = Property<[T, T[], T[]], S>;
+export type HistoryProperty<T, S> = kefir.Property<[T, T[], T[]], S>;
 
 /**
  * Создает постоянный поток, который хранит историю своего изменения.
@@ -25,7 +25,8 @@ export function propertyWithHistory<T, S = never>(
   );
 
   return [
-    combine([pCurrent, emitter.pPast, emitter.pFuture])
+    kefir
+      .combine([pCurrent, emitter.pPast, emitter.pFuture])
       .toProperty()
       // Т.к. значение во все потоки ставится не одновременно,
       // но потоки *связаны*, значит, поставим небольшой debounce, чтобы итоговый поток
@@ -60,8 +61,8 @@ export function property<T, S = never>(initial: T) {
  * @param {E} ourEmitter - instance обертки над эмиттером
  * @returns {[Property<T, S>, E]} Поток и обертка с привязанным эмиттером
  */
-function createProperty<E extends PersistentEmitter<T, S>, T, S>(ourEmitter: E): [Property<T, S>, E] {
-  const property = stream<T, S>(emitter => ourEmitter.bind(emitter)).toProperty();
+function createProperty<E extends PersistentEmitter<T, S>, T, S>(ourEmitter: E): [kefir.Property<T, S>, E] {
+  const property = kefir.stream<T, S>(emitter => ourEmitter.bind(emitter)).toProperty();
 
   return [property, ourEmitter];
 }

@@ -1,6 +1,6 @@
 import cart from 'stores/cart';
 import { FC, useEffect } from 'react';
-import { toPersistentStorage } from 'models/persistent-storage';
+import { toPersistentStorage } from 'core/utils/persistent-storage';
 import { useImmediateProperty } from 'hooks/useProperty';
 
 export const SaveToStorage: FC = () => {

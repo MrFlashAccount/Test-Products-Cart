@@ -1,4 +1,4 @@
-import data from 'data/coupons.json';
+import data from './data/coupons.json';
 import { Property } from 'kefir';
 import { property } from 'core/property';
 

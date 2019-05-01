@@ -1,6 +1,6 @@
 import { Property } from 'kefir';
 import { property } from 'core/property';
-import data from 'data/products.json';
+import data from './data/products.json';
 
 export type Product = {
   id: number;
