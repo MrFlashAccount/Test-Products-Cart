@@ -5,11 +5,17 @@ import { ErrorCatcher } from './partial/error-catcher';
 import { SaveToStorage } from './partial/save-to-storage';
 import { ScrollToTop } from './partial/scroll-to-top';
 import { TopBar } from './topbar';
-import { lazy } from './partial/lazy';
+import { Cart } from './pages/cart';
+import { ProductsList } from './pages/products';
+import { NoMatch } from './pages/404';
 
-const LazyProductsList = lazy(() => import('components/products/products-list'), 'ProductsList');
-const LazyCart = lazy(() => import('./cart/cart'), 'Cart');
-const LazyNoMatch = lazy(() => import('./no-match'), 'NoMatch');
+const maybeRoutes = document.getElementById('routes');
+const routes: { [key: string]: string } = maybeRoutes ? JSON.parse(maybeRoutes.innerHTML).routes : {};
+
+const Registry = {
+  ProductsList: ProductsList,
+  Cart: Cart,
+};
 
 export const Page = () => (
   <StrictMode>
@@ -21,16 +27,14 @@ export const Page = () => (
           <ErrorCatcher>
             <Suspense fallback="Загрузка...">
               <Switch>
-                <Route path="/" exact>
-                  <LazyProductsList />
-                </Route>
-
-                <Route path="/cart/">
-                  <LazyCart />
-                </Route>
+                {Object.keys(routes).map(component => (
+                  <Route path={routes[component]} exact={routes[component] === '/'}>
+                    {React.createElement(Registry[component])}
+                  </Route>
+                ))}
 
                 <Route>
-                  <LazyNoMatch />
+                  <NoMatch />
                 </Route>
               </Switch>
             </Suspense>

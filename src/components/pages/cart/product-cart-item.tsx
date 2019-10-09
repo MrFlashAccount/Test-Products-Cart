@@ -1,8 +1,8 @@
 import React, { memo, useCallback } from 'react';
 import { ProductInCart } from 'models/products-in-cart';
 import cart from 'stores/cart';
-import { Amount } from '../partial/amount';
-import { MemoizedButton } from '../partial/button';
+import { Amount } from '../../partial/amount';
+import { MemoizedButton } from '../../partial/button';
 import { ProductCartItemAmount } from './product-cart-item-amount';
 import { css } from 'astroturf';
 import { WithoutPrint } from 'components/partial/print';

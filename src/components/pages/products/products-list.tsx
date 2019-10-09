@@ -1,8 +1,8 @@
 import React from 'react';
 import { products } from 'stores/products';
-import { ProductCard } from 'components/products/product-card';
+import { ProductCard } from 'components/pages/products/product-card';
 import { useImmediateProperty } from 'hooks/useProperty';
-import { Grid } from '../partial/grid';
+import { Grid } from '../../partial/grid';
 
 /**
  * Список товаров на главной

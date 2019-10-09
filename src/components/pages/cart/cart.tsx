@@ -6,7 +6,7 @@ import React, { memo } from 'react';
 import cart from 'stores/cart';
 import coupons from 'stores/coupons';
 import { products } from 'stores/products';
-import { MemoizedButton } from '../partial/button';
+import { MemoizedButton } from '../../partial/button';
 import { CartTotal } from './cart-total';
 import { CouponsList } from './coupons-list';
 import { ProductCartList } from './product-cart-list';

@@ -2,11 +2,11 @@ import React, { memo } from 'react';
 import { useImmediateProperty } from 'hooks/useProperty';
 import cart from 'stores/cart';
 import { css } from 'astroturf';
-import { Button, MemoizedButton } from '../partial/button';
+import { Button, MemoizedButton } from '../../partial/button';
 import { ProductsInCart } from 'models/products-in-cart';
 import { Property } from 'kefir';
 import { products, Product } from 'stores/products';
-import { Amount } from '../partial/amount';
+import { Amount } from '../../partial/amount';
 import { ObjectMap } from 'types';
 import { Coupon } from 'stores/coupons';
 

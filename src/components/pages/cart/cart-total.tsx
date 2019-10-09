@@ -3,7 +3,7 @@ import { useImmediateProperty } from 'hooks/useProperty';
 import { Property } from 'kefir';
 import { cartTotal, ProductsInCart } from 'models/products-in-cart';
 import React, { memo } from 'react';
-import { Amount } from '../partial/amount';
+import { Amount } from '../../partial/amount';
 
 export interface CartTotalProps {
   pProductsInCart: Property<ProductsInCart, any>;
